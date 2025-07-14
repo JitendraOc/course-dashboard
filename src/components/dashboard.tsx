@@ -1,0 +1,83 @@
+import {
+  BookOpen,
+  GraduationCap,
+  Users,
+  Zap,
+} from 'lucide-react';
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarInset,
+  SidebarTrigger,
+} from './ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import CourseContent from './course-content';
+import { Button } from './ui/button';
+
+export function Dashboard() {
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen">
+        <Sidebar collapsible="icon">
+          <SidebarHeader>
+            <div className="flex items-center gap-2 p-2">
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Zap className="h-6 w-6 text-primary" />
+              </Button>
+              <h1 className="font-headline text-lg font-semibold text-primary">CourseFlow</h1>
+            </div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive tooltip="Course Materials">
+                  <BookOpen />
+                  Course Materials
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Grades">
+                  <GraduationCap />
+                  Grades
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Contact Info">
+                  <Users />
+                  Contact Info
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <div className="flex items-center gap-3 p-3">
+              <Avatar>
+                <AvatarImage src="https://placehold.co/40x40.png" alt="User Avatar" data-ai-hint="user avatar" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold">Jane Doe</span>
+                <span className="text-xs text-muted-foreground">jane.doe@example.com</span>
+              </div>
+            </div>
+          </SidebarFooter>
+        </Sidebar>
+        <SidebarInset>
+          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
+            <SidebarTrigger className="md:hidden" />
+            <div className="flex-1">
+              <h1 className="text-lg font-semibold md:text-xl font-headline">Advanced Web Development</h1>
+            </div>
+          </header>
+          <CourseContent />
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
+  );
+}
