@@ -19,7 +19,7 @@ const CourseContent = () => {
           Welcome back! Here is an overview of your course progress. Dive back in and continue your learning journey.
         </p>
       </div>
-      <Accordion type="multiple" defaultValue={['module-1']} className="w-full space-y-4">
+      <Accordion type="multiple" defaultValue={['module-1']} className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
         {courseData.map((module) => {
           const totalDuration = module.subModules.reduce((acc, sm) => acc + sm.duration, 0);
           return (
