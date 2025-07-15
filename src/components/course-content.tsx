@@ -1,6 +1,7 @@
+
 'use client';
 
-import type { MutableRefObject } from 'react';
+import React, { type MutableRefObject } from 'react';
 import Link from 'next/link';
 import {
   Module,
@@ -10,6 +11,7 @@ import {
 import SubModuleCard from './sub-module-card';
 import { Badge } from './ui/badge';
 import { Book, Clock } from 'lucide-react';
+import { Separator } from './ui/separator';
 
 const CourseContent = ({
   subjects,
@@ -39,44 +41,46 @@ const CourseContent = ({
       )}
 
       <div className="space-y-12">
-        {subjects.map((subject) => (
-          <div 
-            key={subject.id} 
-            ref={(el) => (subjectRefs.current[subject.id] = el)}
-            data-subject-id={subject.id}
-          >
-            <div className="mb-4">
-              <h2 className="text-xl md:text-2xl font-headline font-semibold">{subject.title}</h2>
-              <p className="text-sm text-muted-foreground">
-                {subject.learningObjective ? subject.learningObjective : "Explore the modules within this subject to achieve the course's overall learning objectives."}
-              </p>
-            </div>
-            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {subject.modules.map((module) => {
-                const totalDuration = module.subModules.reduce((acc, sm) => acc + sm.duration, 0);
-                return (
-                  <Link href={`/modules/${module.id}`} key={module.id} className="block">
-                    <div
-                      className="rounded-lg bg-card p-4 shadow-sm hover:bg-accent/50 cursor-pointer flex items-center gap-4 h-full"
-                    >
-                      <div className="bg-primary/10 p-3 rounded-full">
-                        <Book className="h-6 w-6 text-primary" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex w-full items-center justify-between">
-                          <h2 className="font-headline text-lg md:text-xl font-semibold">{module.title}</h2>
-                          <Badge variant="outline" className="flex items-center gap-2 p-2 shrink-0">
-                            <Clock className="h-4 w-4" />
-                            <span>~{Math.floor(totalDuration / 60)}h {totalDuration % 60}m</span>
-                          </Badge>
+        {subjects.map((subject, index) => (
+          <React.Fragment key={subject.id}>
+             {index > 0 && <Separator className="my-8" />}
+            <div 
+              ref={(el) => (subjectRefs.current[subject.id] = el)}
+              data-subject-id={subject.id}
+            >
+              <div className="mb-4">
+                <h2 className="text-xl md:text-2xl font-headline font-semibold">{subject.title}</h2>
+                <p className="text-sm text-muted-foreground">
+                  {subject.learningObjective ? subject.learningObjective : "Explore the modules within this subject to achieve the course's overall learning objectives."}
+                </p>
+              </div>
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {subject.modules.map((module) => {
+                  const totalDuration = module.subModules.reduce((acc, sm) => acc + sm.duration, 0);
+                  return (
+                    <Link href={`/modules/${module.id}`} key={module.id} className="block">
+                      <div
+                        className="rounded-lg bg-card p-4 shadow-sm hover:bg-accent/50 cursor-pointer flex items-center gap-4 h-full"
+                      >
+                        <div className="bg-primary/10 p-3 rounded-full">
+                          <Book className="h-6 w-6 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex w-full items-center justify-between">
+                            <h2 className="font-headline text-lg md:text-xl font-semibold">{module.title}</h2>
+                            <Badge variant="outline" className="flex items-center gap-2 p-2 shrink-0">
+                              <Clock className="h-4 w-4" />
+                              <span>~{Math.floor(totalDuration / 60)}h {totalDuration % 60}m</span>
+                            </Badge>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          </React.Fragment>
         ))}
       </div>
     </div>
