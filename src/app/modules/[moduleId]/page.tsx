@@ -1,7 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState, useMemo, useCallback } from 'react';
 import { courseData } from '@/lib/data';
 import type { SubModule } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -30,6 +30,7 @@ const getIcon = (type: SubModule['type'], status: SubModule['status']) => {
 
 export default function ModulePage() {
   const params = useParams();
+  const router = useRouter();
   const { moduleId } = params;
 
   const { currentModule, parentSubject } = useMemo(() => {
@@ -44,21 +45,27 @@ export default function ModulePage() {
 
   const [activeSubModule, setActiveSubModule] = useState<SubModule | null>(currentModule?.subModules[0] || null);
   
-  const handleSubModuleClick = (subModule: SubModule, moduleId: string) => {
-    // This is a simple navigation, we can expand it later to switch modules too
-    if (moduleId === currentModule?.id) {
-       setActiveSubModule(subModule);
-    } else {
-        // Full page navigation is an option if we want to switch module contexts
-        // For now, just setting active sub-module from the current module
-        const targetModule = parentSubject?.modules.find(m => m.id === moduleId);
-        if (targetModule) {
-            // To simplify, we're not changing the URL, just the content
-            // A more complex implementation might use router.push
-            setActiveSubModule(targetModule.subModules.find(sm => sm.title === subModule.title) || null);
-        }
+  const allSubModules = useMemo(() => parentSubject?.modules.flatMap(m => m.subModules.map(sm => ({ ...sm, moduleId: m.id }))) || [], [parentSubject]);
+  
+  const currentIndex = useMemo(() => {
+      if (!activeSubModule) return -1;
+      return allSubModules.findIndex(sm => sm.title === activeSubModule.title && sm.moduleId === currentModule?.id);
+  }, [activeSubModule, allSubModules, currentModule]);
+
+  const navigate = useCallback((direction: 'next' | 'prev') => {
+    if (currentIndex === -1) return;
+
+    const nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+
+    if (nextIndex >= 0 && nextIndex < allSubModules.length) {
+      const nextSubModuleWithModuleId = allSubModules[nextIndex];
+      if (nextSubModuleWithModuleId.moduleId !== moduleId) {
+        router.push(`/modules/${nextSubModuleWithModuleId.moduleId}`);
+      } else {
+        setActiveSubModule(nextSubModuleWithModuleId);
+      }
     }
-  };
+  }, [currentIndex, allSubModules, moduleId, router]);
 
 
   if (!currentModule || !parentSubject) {
@@ -71,6 +78,9 @@ export default function ModulePage() {
       </div>
     );
   }
+
+  const isFirstSubModule = currentIndex === 0;
+  const isLastSubModule = currentIndex === allSubModules.length - 1;
 
   return (
     <div className="flex h-screen bg-background">
@@ -93,10 +103,16 @@ export default function ModulePage() {
                                 {module.subModules.map((subModule, index) => (
                                 <li key={index}>
                                     <button
-                                    onClick={() => setActiveSubModule(subModule)}
+                                    onClick={() => {
+                                        if (module.id !== currentModule.id) {
+                                            router.push(`/modules/${module.id}`);
+                                        } else {
+                                            setActiveSubModule(subModule);
+                                        }
+                                    }}
                                     className={cn(
                                         "w-full text-left p-3 rounded-md flex items-center gap-3 transition-colors",
-                                        activeSubModule?.title === subModule.title ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
+                                        activeSubModule?.title === subModule.title && module.id === currentModule.id ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
                                     )}
                                     >
                                     {getIcon(subModule.type, subModule.status)}
@@ -136,8 +152,8 @@ export default function ModulePage() {
               )}
             </div>
             <footer className="p-4 border-t flex justify-between">
-                <Button variant="outline">Previous</Button>
-                <Button>Next</Button>
+                <Button variant="outline" onClick={() => navigate('prev')} disabled={isFirstSubModule}>Previous</Button>
+                <Button onClick={() => navigate('next')} disabled={isLastSubModule}>Next</Button>
             </footer>
           </div>
         ) : (
