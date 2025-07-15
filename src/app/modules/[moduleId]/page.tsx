@@ -43,29 +43,40 @@ export default function ModulePage() {
     return { currentModule: null, parentSubject: null };
   }, [moduleId]);
 
+  const allSubModulesInCourse = useMemo(() =>
+    courseData.flatMap(subject =>
+      subject.modules.flatMap(module =>
+        module.subModules.map(subModule => ({
+          ...subModule,
+          moduleId: module.id,
+          subjectId: subject.id,
+        }))
+      )
+    )
+  , []);
+
   const [activeSubModule, setActiveSubModule] = useState<SubModule | null>(currentModule?.subModules[0] || null);
   
-  const allSubModules = useMemo(() => parentSubject?.modules.flatMap(m => m.subModules.map(sm => ({ ...sm, moduleId: m.id }))) || [], [parentSubject]);
-  
   const currentIndex = useMemo(() => {
-      if (!activeSubModule) return -1;
-      return allSubModules.findIndex(sm => sm.title === activeSubModule.title && sm.moduleId === currentModule?.id);
-  }, [activeSubModule, allSubModules, currentModule]);
+      if (!activeSubModule || !currentModule) return -1;
+      return allSubModulesInCourse.findIndex(sm => sm.title === activeSubModule.title && sm.moduleId === currentModule.id);
+  }, [activeSubModule, allSubModulesInCourse, currentModule]);
 
   const navigate = useCallback((direction: 'next' | 'prev') => {
     if (currentIndex === -1) return;
-
     const nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
 
-    if (nextIndex >= 0 && nextIndex < allSubModules.length) {
-      const nextSubModuleWithModuleId = allSubModules[nextIndex];
-      if (nextSubModuleWithModuleId.moduleId !== moduleId) {
-        router.push(`/modules/${nextSubModuleWithModuleId.moduleId}`);
+    if (nextIndex >= 0 && nextIndex < allSubModulesInCourse.length) {
+      const nextItem = allSubModulesInCourse[nextIndex];
+      if (nextItem.moduleId !== moduleId) {
+        router.push(`/modules/${nextItem.moduleId}`);
       } else {
-        setActiveSubModule(nextSubModuleWithModuleId);
+        setActiveSubModule(nextItem);
       }
+    } else if (direction === 'next' && nextIndex >= allSubModulesInCourse.length) {
+      router.push('/');
     }
-  }, [currentIndex, allSubModules, moduleId, router]);
+  }, [currentIndex, allSubModulesInCourse, moduleId, router]);
 
 
   if (!currentModule || !parentSubject) {
@@ -79,8 +90,8 @@ export default function ModulePage() {
     );
   }
 
-  const isFirstSubModule = currentIndex === 0;
-  const isLastSubModule = currentIndex === allSubModules.length - 1;
+  const isFirstSubModuleInCourse = currentIndex === 0;
+  const isLastSubModuleInCourse = currentIndex === allSubModulesInCourse.length - 1;
 
   return (
     <div className="flex h-screen bg-background">
@@ -152,8 +163,8 @@ export default function ModulePage() {
               )}
             </div>
             <footer className="p-4 border-t flex justify-between">
-                <Button variant="outline" onClick={() => navigate('prev')} disabled={isFirstSubModule}>Previous</Button>
-                <Button onClick={() => navigate('next')} disabled={isLastSubModule}>Next</Button>
+                <Button variant="outline" onClick={() => navigate('prev')} disabled={isFirstSubModuleInCourse}>Previous</Button>
+                <Button onClick={() => navigate('next')} disabled={isLastSubModuleInCourse}>Next</Button>
             </footer>
           </div>
         ) : (
