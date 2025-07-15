@@ -1,6 +1,7 @@
 'use client';
 
 import type { MutableRefObject } from 'react';
+import Link from 'next/link';
 import {
   Module,
   SubModule,
@@ -9,8 +10,6 @@ import {
 import SubModuleCard from './sub-module-card';
 import { Badge } from './ui/badge';
 import { Book, Clock } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { useState } from 'react';
 
 const CourseContent = ({
   subjects,
@@ -19,9 +18,6 @@ const CourseContent = ({
   subjects: Subject[];
   subjectRefs: MutableRefObject<Record<string, HTMLDivElement | null>>;
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedModule, setSelectedModule] = useState < Module | null > (null);
-
   const inProgressSubModules = subjects.flatMap(subject =>
     subject.modules.flatMap(module =>
       module.subModules.filter(subModule => subModule.status === 'in-progress')
@@ -59,49 +55,30 @@ const CourseContent = ({
               {subject.modules.map((module) => {
                 const totalDuration = module.subModules.reduce((acc, sm) => acc + sm.duration, 0);
                 return (
-                  <div
-                    key={module.id}
-                    className="rounded-lg bg-card p-4 shadow-sm hover:bg-accent/50 cursor-pointer flex items-center gap-4"
-                    onClick={() => {
-                      setSelectedModule(module);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <div className="bg-primary/10 p-3 rounded-full">
-                      <Book className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex w-full items-center justify-between">
-                        <h2 className="font-headline text-xl font-semibold">{module.title}</h2>
-                        <Badge variant="outline" className="flex items-center gap-2 p-2">
-                          <Clock className="h-4 w-4" />
-                          <span>~{Math.floor(totalDuration / 60)}h {totalDuration % 60}m</span>
-                        </Badge>
+                  <Link href={`/modules/${module.id}`} key={module.id} className="block">
+                    <div
+                      className="rounded-lg bg-card p-4 shadow-sm hover:bg-accent/50 cursor-pointer flex items-center gap-4 h-full"
+                    >
+                      <div className="bg-primary/10 p-3 rounded-full">
+                        <Book className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex w-full items-center justify-between">
+                          <h2 className="font-headline text-xl font-semibold">{module.title}</h2>
+                          <Badge variant="outline" className="flex items-center gap-2 p-2 shrink-0">
+                            <Clock className="h-4 w-4" />
+                            <span>~{Math.floor(totalDuration / 60)}h {totalDuration % 60}m</span>
+                          </Badge>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
           </div>
         ))}
       </div>
-
-
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[800px]">
-          <DialogHeader>
-            <DialogTitle>{selectedModule?.title}</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <div className="flex flex-col gap-4">
-              {selectedModule?.subModules.map((subModule) => (
-                <SubModuleCard key={subModule.title} subModule={subModule} />
-              ))}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
