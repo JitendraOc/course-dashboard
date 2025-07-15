@@ -1,6 +1,7 @@
 'use client';
 import {
   BookOpen,
+  CalendarClock,
   GraduationCap,
   Users,
   Zap,
@@ -28,6 +29,7 @@ import { courseData } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
+import { Badge } from './ui/badge';
 
 export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
@@ -57,12 +59,13 @@ export function Dashboard() {
       { root: contentAreaRef.current, threshold: 0.5 }
     );
 
-    Object.values(subjectRefs.current).forEach((ref) => {
+    const refs = Object.values(subjectRefs.current);
+    refs.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
 
     return () => {
-      Object.values(subjectRefs.current).forEach((ref) => {
+      refs.forEach((ref) => {
         if (ref) observer.unobserve(ref);
       });
     };
@@ -134,11 +137,15 @@ export function Dashboard() {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
-            <SidebarTrigger className="md:hidden" />
-              <div className="flex-1 flex flex-col">
+          <header className="flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="md:hidden" />
               <h1 className="text-lg font-semibold md:text-xl font-headline">Course Dashboard</h1>
             </div>
+            <Badge variant="outline" className="flex items-center gap-2">
+              <CalendarClock className="h-4 w-4" />
+              <span>Access ends: December 31, 2024</span>
+            </Badge>
           </header>
           <div ref={contentAreaRef} className="flex-1 overflow-y-auto">
             <CourseContent 
