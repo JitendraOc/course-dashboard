@@ -23,14 +23,51 @@ import {
   SidebarMenuSubButton,
 } from './ui/sidebar';
 import { Accordion } from './ui/accordion';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { courseData } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
 
 export function Dashboard() {
-  const [selectedSubject, setSelectedSubject] = useState(courseData[0]); // Set initial subject
+  const [activeSubject, setActiveSubject] = useState(courseData[0].id);
+  const contentAreaRef = useRef<HTMLDivElement>(null);
+  const subjectRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const handleSubjectClick = (subjectId: string) => {
+    setActiveSubject(subjectId);
+    subjectRefs.current[subjectId]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const subjectId = entry.target.getAttribute('data-subject-id');
+            if (subjectId) {
+              setActiveSubject(subjectId);
+            }
+          }
+        });
+      },
+      { root: contentAreaRef.current, threshold: 0.5 }
+    );
+
+    Object.values(subjectRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      Object.values(subjectRefs.current).forEach((ref) => {
+        if (ref) observer.unobserve(ref);
+      });
+    };
+  }, []);
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
@@ -56,8 +93,8 @@ export function Dashboard() {
                       {courseData.map((subject) => (
                           <SidebarMenuSubButton 
                             key={subject.id}
-                            onClick={() => setSelectedSubject(subject)}
-                            isActive={selectedSubject?.id === subject.id}
+                            onClick={() => handleSubjectClick(subject.id)}
+                            isActive={activeSubject === subject.id}
                           >
                             {subject.title}
                           </SidebarMenuSubButton>
@@ -98,10 +135,15 @@ export function Dashboard() {
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger className="md:hidden" />
               <div className="flex-1 flex flex-col">
-              <h1 className="text-lg font-semibold md:text-xl font-headline">{selectedSubject.title}</h1>
+              <h1 className="text-lg font-semibold md:text-xl font-headline">Course Materials</h1>
             </div>
           </header>
-          <CourseContent subject={selectedSubject} />
+          <div ref={contentAreaRef} className="flex-1 overflow-y-auto">
+            <CourseContent 
+              subjects={courseData}
+              subjectRefs={subjectRefs}
+            />
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>
