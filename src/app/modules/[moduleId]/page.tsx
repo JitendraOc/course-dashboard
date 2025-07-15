@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { CircleCheck, FileText, PlayCircle, Puzzle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const getIcon = (type: SubModule['type'], status: SubModule['status']) => {
     const iconProps = { className: "h-5 w-5 shrink-0" };
@@ -31,19 +32,39 @@ export default function ModulePage() {
   const params = useParams();
   const { moduleId } = params;
 
-  const module = useMemo(() => 
-    courseData
-      .flatMap(subject => subject.modules)
-      .find(m => m.id === moduleId),
-    [moduleId]
-  );
+  const { currentModule, parentSubject } = useMemo(() => {
+    for (const subject of courseData) {
+      const module = subject.modules.find(m => m.id === moduleId);
+      if (module) {
+        return { currentModule: module, parentSubject: subject };
+      }
+    }
+    return { currentModule: null, parentSubject: null };
+  }, [moduleId]);
 
-  const [activeSubModule, setActiveSubModule] = useState<SubModule | null>(module?.subModules[0] || null);
+  const [activeSubModule, setActiveSubModule] = useState<SubModule | null>(currentModule?.subModules[0] || null);
+  
+  const handleSubModuleClick = (subModule: SubModule, moduleId: string) => {
+    // This is a simple navigation, we can expand it later to switch modules too
+    if (moduleId === currentModule?.id) {
+       setActiveSubModule(subModule);
+    } else {
+        // Full page navigation is an option if we want to switch module contexts
+        // For now, just setting active sub-module from the current module
+        const targetModule = parentSubject?.modules.find(m => m.id === moduleId);
+        if (targetModule) {
+            // To simplify, we're not changing the URL, just the content
+            // A more complex implementation might use router.push
+            setActiveSubModule(targetModule.subModules.find(sm => sm.title === subModule.title) || null);
+        }
+    }
+  };
 
-  if (!module) {
+
+  if (!currentModule || !parentSubject) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>Module not found.</p>
+        <p>Module or Subject not found.</p>
         <Link href="/" className="ml-4">
             <Button variant="outline">Go back to Dashboard</Button>
         </Link>
@@ -55,29 +76,40 @@ export default function ModulePage() {
     <div className="flex h-screen bg-background">
       <aside className="w-80 border-r border-border flex flex-col">
         <div className="p-4 border-b">
-          <h1 className="text-lg font-headline font-semibold">{module.title}</h1>
-          <Link href="/" className="text-sm text-primary hover:underline">
-            Back to course
-          </Link>
+            <h1 className="text-lg font-headline font-semibold">{parentSubject.title}</h1>
+            <Link href="/" className="text-sm text-primary hover:underline">
+                Back to course
+            </Link>
         </div>
         <nav className="flex-1 overflow-y-auto">
-          <ul className="p-2">
-            {module.subModules.map((subModule, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => setActiveSubModule(subModule)}
-                  className={cn(
-                    "w-full text-left p-3 rounded-md flex items-center gap-3 transition-colors",
-                    activeSubModule?.title === subModule.title ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
-                  )}
-                >
-                  {getIcon(subModule.type, subModule.status)}
-                  <span className="flex-1 text-sm">{subModule.title}</span>
-                  <span className="text-xs text-muted-foreground">{subModule.duration} min</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+            <Accordion type="single" collapsible defaultValue={currentModule.id} className="w-full">
+                {parentSubject.modules.map(module => (
+                    <AccordionItem value={module.id} key={module.id}>
+                        <AccordionTrigger className="px-4 py-2 text-sm font-medium hover:bg-accent/50">
+                            {module.title}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <ul className="p-2 pt-0">
+                                {module.subModules.map((subModule, index) => (
+                                <li key={index}>
+                                    <button
+                                    onClick={() => setActiveSubModule(subModule)}
+                                    className={cn(
+                                        "w-full text-left p-3 rounded-md flex items-center gap-3 transition-colors",
+                                        activeSubModule?.title === subModule.title ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
+                                    )}
+                                    >
+                                    {getIcon(subModule.type, subModule.status)}
+                                    <span className="flex-1 text-sm">{subModule.title}</span>
+                                    <span className="text-xs text-muted-foreground">{subModule.duration} min</span>
+                                    </button>
+                                </li>
+                                ))}
+                            </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
         </nav>
       </aside>
       <main className="flex-1 flex flex-col">
