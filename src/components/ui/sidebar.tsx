@@ -780,7 +780,7 @@ const SidebarCollapsibleButton = React.forwardRef<
           {Array.isArray(children) ? children[0] : null}
           <span>{Array.isArray(children) ? children[1] : children}</span>
         </div>
-        <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+        {/* <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" /> */}
       </SidebarMenuButton>
     </AccordionTrigger>
   );

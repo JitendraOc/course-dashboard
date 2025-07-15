@@ -88,7 +88,7 @@ export function Dashboard() {
                 <SidebarCollapsible value="course-materials">
                   <SidebarCollapsibleButton>
                     <BookOpen />
-                    Course Materials
+                    <span className="flex-1">Course Materials</span>
                   </SidebarCollapsibleButton>
                   <SidebarCollapsibleContent>
                     <SidebarMenuSub>
@@ -137,7 +137,7 @@ export function Dashboard() {
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger className="md:hidden" />
               <div className="flex-1 flex flex-col">
-              <h1 className="text-lg font-semibold md:text-xl font-headline">{selectedSubject?.title}</h1>
+              <h1 className="text-lg font-semibold md:text-xl font-headline">Course Dashboard</h1>
             </div>
           </header>
           <div ref={contentAreaRef} className="flex-1 overflow-y-auto">
