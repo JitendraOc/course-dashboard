@@ -1,3 +1,4 @@
+
 'use client';
 import {
   BookOpen,
@@ -117,7 +118,7 @@ export function Dashboard() {
                             key={subject.id}
                             onClick={() => handleSubjectClick(subject.id)}
                             isActive={activeSubject === subject.id}
-                            className="whitespace-normal h-auto"
+                            className="whitespace-normal h-auto py-2 text-sm"
                           >
                             {subject.title}
                           </SidebarMenuSubButton>
@@ -185,6 +186,8 @@ export function Dashboard() {
             <CourseContent 
               subjects={courseData}
               subjectRefs={subjectRefs}
+              activeSubject={activeSubject}
+              onSubjectChange={handleSubjectClick}
             />
           </div>
         </SidebarInset>

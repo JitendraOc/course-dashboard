@@ -3,22 +3,30 @@
 
 import React, { type MutableRefObject } from 'react';
 import Link from 'next/link';
-import {
-  Module,
-  SubModule,
-  Subject
-} from '@/lib/data';
+import { Module, SubModule, Subject } from '@/lib/data';
 import SubModuleCard from './sub-module-card';
 import { Badge } from './ui/badge';
 import { Book, Clock } from 'lucide-react';
 import { Separator } from './ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from './ui/label';
 
 const CourseContent = ({
   subjects,
   subjectRefs,
+  activeSubject,
+  onSubjectChange,
 }: {
   subjects: Subject[];
   subjectRefs: MutableRefObject<Record<string, HTMLDivElement | null>>;
+  activeSubject: string;
+  onSubjectChange: (subjectId: string) => void;
 }) => {
   const inProgressSubModules = subjects.flatMap(subject =>
     subject.modules.flatMap(module =>
@@ -29,7 +37,7 @@ const CourseContent = ({
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-0 relative">
       {inProgressSubModules.length > 0 && (
-        <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-8">
+        <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
           <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {inProgressSubModules.map((subModule) => (
@@ -39,6 +47,22 @@ const CourseContent = ({
           <div className="h-8"></div>
         </div>
       )}
+      
+      <div className="md:hidden pb-4 space-y-2">
+        <Label htmlFor="subject-selector">Select a Subject</Label>
+        <Select value={activeSubject} onValueChange={onSubjectChange}>
+          <SelectTrigger id="subject-selector" className="w-full">
+            <SelectValue placeholder="Select a subject..." />
+          </SelectTrigger>
+          <SelectContent>
+            {subjects.map(subject => (
+              <SelectItem key={subject.id} value={subject.id}>
+                {subject.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <div className="space-y-12">
         {subjects.map((subject, index) => (
