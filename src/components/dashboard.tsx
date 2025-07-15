@@ -117,6 +117,7 @@ export function Dashboard() {
                             key={subject.id}
                             onClick={() => handleSubjectClick(subject.id)}
                             isActive={activeSubject === subject.id}
+                            className="whitespace-normal h-auto"
                           >
                             {subject.title}
                           </SidebarMenuSubButton>
