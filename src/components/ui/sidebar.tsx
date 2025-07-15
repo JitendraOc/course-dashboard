@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft } from "lucide-react"
+import { PanelLeft, ChevronDown } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -498,7 +498,7 @@ const SidebarMenu = React.forwardRef<
   <ul
     ref={ref}
     data-sidebar="menu"
-    className={cn("flex w-full min-w-0 flex-col gap-1", className)}
+    className={cn("flex w-full min-w-0 flex-col gap-1 p-2", className)}
     {...props}
   />
 ))
@@ -765,23 +765,26 @@ const SidebarCollapsibleButton = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SidebarMenuButton>
 >(({ className, children, ...props }, ref) => {
   return (
- <AccordionTrigger asChild className="group/collapsible-button">
- <SidebarMenuButton
- ref={ref}
-      data-sidebar="collapsible-button"
-      className={cn(
-        "[&>svg]:data-[state=open]:rotate-90",
-        "group-data-[collapsible=icon]/sidebar-wrapper:!size-8 group-data-[collapsible=icon]/sidebar-wrapper:!p-2 group-data-[collapsible=icon]/sidebar-wrapper:[&>svg]:size-4",
-        className
-      )}
-      {...props}
- >
-      {children}
- </SidebarMenuButton>
- </AccordionTrigger>
-    )
-
-})
+    <AccordionTrigger asChild className="group/collapsible-button">
+      <SidebarMenuButton
+        ref={ref}
+        data-sidebar="collapsible-button"
+        className={cn(
+          "justify-between",
+          "group-data-[collapsible=icon]/sidebar-wrapper:!size-8 group-data-[collapsible=icon]/sidebar-wrapper:!p-2 group-data-[collapsible=icon]/sidebar-wrapper:[&>svg]:size-4",
+          className
+        )}
+        {...props}
+      >
+        <div className="flex items-center gap-2">
+          {Array.isArray(children) ? children[0] : null}
+          <span>{Array.isArray(children) ? children[1] : children}</span>
+        </div>
+        <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+      </SidebarMenuButton>
+    </AccordionTrigger>
+  );
+});
 SidebarCollapsibleButton.displayName = "SidebarCollapsibleButton";
 
 const SidebarCollapsibleContent = React.forwardRef<
