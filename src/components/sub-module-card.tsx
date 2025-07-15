@@ -35,7 +35,7 @@ const SubModuleCard = ({ subModule }: SubModuleCardProps) => {
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-1 items-center gap-4">
             {getIcon(subModule.type, subModule.status)}
-            <CardTitle className="font-headline text-lg font-semibold leading-tight">
+            <CardTitle className="font-headline text-base md:text-lg font-semibold leading-tight">
               {subModule.title}
             </CardTitle>
           </div>

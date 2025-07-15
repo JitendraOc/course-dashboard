@@ -170,12 +170,12 @@ export function Dashboard() {
              <div className="p-4 md:p-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Course Progress</CardTitle>
+                        <CardTitle className="text-xl md:text-2xl">Course Progress</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-4">
                             <Progress value={courseProgress} className="w-full" />
-                            <span className="font-semibold text-lg text-primary">{courseProgress}%</span>
+                            <span className="font-semibold text-base md:text-lg text-primary">{courseProgress}%</span>
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">You've completed {completedSubModules} out of {totalSubModules} learning activities.</p>
                     </CardContent>

@@ -28,7 +28,7 @@ const CourseContent = ({
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-0 relative">
       {inProgressSubModules.length > 0 && (
         <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-8">
-          <h2 className="text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
+          <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {inProgressSubModules.map((subModule) => (
               <SubModuleCard key={`${subModule.title}-${Math.random()}`} subModule={subModule} />
@@ -46,7 +46,7 @@ const CourseContent = ({
             data-subject-id={subject.id}
           >
             <div className="mb-4">
-              <h2 className="text-2xl font-headline font-semibold">{subject.title}</h2>
+              <h2 className="text-xl md:text-2xl font-headline font-semibold">{subject.title}</h2>
               <p className="text-sm text-muted-foreground">
                 {subject.learningObjective ? subject.learningObjective : "Explore the modules within this subject to achieve the course's overall learning objectives."}
               </p>
@@ -64,7 +64,7 @@ const CourseContent = ({
                       </div>
                       <div className="flex-1">
                         <div className="flex w-full items-center justify-between">
-                          <h2 className="font-headline text-xl font-semibold">{module.title}</h2>
+                          <h2 className="font-headline text-lg md:text-xl font-semibold">{module.title}</h2>
                           <Badge variant="outline" className="flex items-center gap-2 p-2 shrink-0">
                             <Clock className="h-4 w-4" />
                             <span>~{Math.floor(totalDuration / 60)}h {totalDuration % 60}m</span>
