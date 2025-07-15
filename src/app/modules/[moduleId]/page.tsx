@@ -5,7 +5,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { courseData } from '@/lib/data';
 import type { SubModule } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { CircleCheck, FileText, PlayCircle, Puzzle } from 'lucide-react';
+import { CircleCheck, FileText, PlayCircle, Puzzle, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -68,8 +68,9 @@ export default function ModulePage() {
 
     if (nextIndex >= 0 && nextIndex < allSubModulesInCourse.length) {
       const nextItem = allSubModulesInCourse[nextIndex];
-      if (nextItem.moduleId !== moduleId) {
-        router.push(`/modules/${nextItem.moduleId}`);
+      const nextItemModule = courseData.flatMap(s => s.modules).find(m => m.id === nextItem.moduleId);
+      if (nextItemModule && nextItemModule.id !== moduleId) {
+        router.push(`/modules/${nextItemModule.id}`);
       } else {
         setActiveSubModule(nextItem);
       }
@@ -143,6 +144,13 @@ export default function ModulePage() {
         {activeSubModule ? (
           <div className="flex-1 flex flex-col">
             <header className="p-4 border-b">
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-2">
+                <Link href="/" className="hover:text-primary">Course</Link>
+                <ChevronRight className="h-4 w-4" />
+                <span>{parentSubject.title}</span>
+                <ChevronRight className="h-4 w-4" />
+                <span>{currentModule.title}</span>
+              </div>
               <h2 className="text-xl font-headline font-semibold">{activeSubModule.title}</h2>
             </header>
             <div className="flex-1 p-6 overflow-y-auto">
