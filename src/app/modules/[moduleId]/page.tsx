@@ -150,6 +150,8 @@ export default function ModulePage() {
                 <span>{parentSubject.title}</span>
                 <ChevronRight className="h-4 w-4" />
                 <span>{currentModule.title}</span>
+                <ChevronRight className="h-4 w-4" />
+                <span className="font-medium text-foreground">{activeSubModule.title}</span>
               </div>
               <h2 className="text-xl font-headline font-semibold">{activeSubModule.title}</h2>
             </header>
