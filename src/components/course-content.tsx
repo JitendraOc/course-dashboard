@@ -48,7 +48,7 @@ const CourseContent = ({
         </div>
       )}
       
-      <div className="md:hidden pb-4 space-y-2">
+      <div className="md:hidden sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 space-y-2">
         <Label htmlFor="subject-selector">Select a Subject</Label>
         <Select value={activeSubject} onValueChange={onSubjectChange}>
           <SelectTrigger id="subject-selector" className="w-full">
