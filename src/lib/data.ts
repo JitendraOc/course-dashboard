@@ -19,6 +19,51 @@ export type Subject = {
   learningObjective?: string;
 }
 
+export type GradedAssignment = {
+  id: string;
+  title: string;
+  status: 'Locked' | 'Submitted' | 'Graded';
+  dueDate: string;
+  weight: number;
+  grade: string;
+};
+
+export const gradesData: GradedAssignment[] = [
+    {
+        id: 'assignment-1',
+        title: 'Module 1 Challenge: The basics of user experience design',
+        status: 'Locked',
+        dueDate: 'Jul 23, 11:59 PM PDT',
+        weight: 33.33,
+        grade: '--',
+    },
+    {
+        id: 'assignment-2',
+        title: 'Module 2 challenge: Thinking like a UX designer',
+        status: 'Locked',
+        dueDate: 'Jul 28, 11:59 PM PDT',
+        weight: 33.33,
+        grade: '--',
+    },
+    {
+        id: 'assignment-3',
+        title: 'Module 3 challenge: Design sprints',
+        status: 'Locked',
+        dueDate: 'Aug 1, 11:59 PM PDT',
+        weight: 33.33,
+        grade: '--',
+    },
+    {
+        id: 'assignment-4',
+        title: 'Module 4 Challenge: Research in the design process',
+        status: 'Locked',
+        dueDate: 'Aug 6, 11:59 PM PDT',
+        weight: 0,
+        grade: '--',
+    },
+];
+
+
 export const courseData: Subject[] = [
   {
     id: 'subject-1',

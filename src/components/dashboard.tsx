@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import Link from 'next/link';
 
 export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
@@ -110,10 +111,12 @@ export function Dashboard() {
               </Accordion>
 
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Grades">
-                  <GraduationCap />
-                  Grades
-                </SidebarMenuButton>
+                <Link href="/grades">
+                  <SidebarMenuButton tooltip="Grades">
+                    <GraduationCap />
+                    Grades
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Contact Info">
