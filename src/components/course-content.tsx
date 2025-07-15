@@ -41,7 +41,7 @@ const CourseContent = ({
             <>
               <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {inProgressSubModules.map((subModule) => (
+                {inProgressSubModules.slice(0, 1).map((subModule) => (
                   <SubModuleCard key={`${subModule.title}-${Math.random()}`} subModule={subModule} />
                 ))}
               </div>
