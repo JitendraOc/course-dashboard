@@ -1,3 +1,4 @@
+'use client';
 import {
   BookOpen,
   GraduationCap,
@@ -15,12 +16,21 @@ import {
   SidebarFooter,
   SidebarInset,
   SidebarTrigger,
+  SidebarCollapsible,
+  SidebarCollapsibleButton,
+  SidebarCollapsibleContent,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
 } from './ui/sidebar';
+import { Accordion } from './ui/accordion';
+import { useState } from 'react';
+import { courseData } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
 
 export function Dashboard() {
+  const [selectedSubject, setSelectedSubject] = useState(courseData[0]); // Set initial subject
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
@@ -35,12 +45,28 @@ export function Dashboard() {
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive tooltip="Course Materials">
-                  <BookOpen />
-                  Course Materials
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <Accordion type="multiple" defaultValue={['course-materials']}>
+                <SidebarCollapsible value="course-materials">
+                  <SidebarCollapsibleButton>
+                    <BookOpen />
+                    Course Materials
+                  </SidebarCollapsibleButton>
+                  <SidebarCollapsibleContent>
+                    <SidebarMenuSub>
+                      {courseData.map((subject) => (
+                          <SidebarMenuSubButton 
+                            key={subject.id}
+                            onClick={() => setSelectedSubject(subject)}
+                            isActive={selectedSubject?.id === subject.id}
+                          >
+                            {subject.title}
+                          </SidebarMenuSubButton>
+                      ))}
+                    </SidebarMenuSub>
+                  </SidebarCollapsibleContent>
+                </SidebarCollapsible>
+              </Accordion>
+
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Grades">
                   <GraduationCap />
@@ -71,11 +97,11 @@ export function Dashboard() {
         <SidebarInset>
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger className="md:hidden" />
-            <div className="flex-1">
+              <div className="flex-1 flex flex-col">
               <h1 className="text-lg font-semibold md:text-xl font-headline">Advanced Web Development</h1>
             </div>
           </header>
-          <CourseContent />
+          <CourseContent subject={selectedSubject} />
         </SidebarInset>
       </div>
     </SidebarProvider>

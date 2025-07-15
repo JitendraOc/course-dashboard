@@ -24,6 +24,12 @@ const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "@/components/ui/accordion"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
@@ -564,10 +570,14 @@ const SidebarMenuButton = React.forwardRef<
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
-      />
+>
+ {asChild ? null : props.children}
+ </Comp>
     )
 
-    if (!tooltip) {
+ // If asChild is true, the children are expected to be passed to the Slot.
+ // If there's no tooltip and asChild is false (rendering a button), return the button with children.
+ if (!tooltip && !asChild) {
       return button
     }
 
@@ -735,15 +745,77 @@ const SidebarMenuSubButton = React.forwardRef<
 })
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton"
 
+// Sidebar Collapsible Components
+
+const SidebarCollapsible = React.forwardRef<
+  React.ElementRef<typeof AccordionItem>,
+  React.ComponentPropsWithoutRef<typeof AccordionItem>
+>(({ className, ...props }, ref) => (
+  <AccordionItem
+    ref={ref}
+    data-sidebar="collapsible"
+    className={cn("border-none", className)}
+    {...props}
+  />
+))
+SidebarCollapsible.displayName = "SidebarCollapsible"
+
+const SidebarCollapsibleButton = React.forwardRef<
+  React.ElementRef<typeof SidebarMenuButton>,
+  React.ComponentPropsWithoutRef<typeof SidebarMenuButton>
+>(({ className, children, ...props }, ref) => {
+  return (
+ <AccordionTrigger asChild className="group/collapsible-button">
+ <SidebarMenuButton
+ ref={ref}
+      data-sidebar="collapsible-button"
+      className={cn(
+        "[&>svg]:data-[state=open]:rotate-90",
+        "group-data-[collapsible=icon]/sidebar-wrapper:!size-8 group-data-[collapsible=icon]/sidebar-wrapper:!p-2 group-data-[collapsible=icon]/sidebar-wrapper:[&>svg]:size-4",
+        className
+      )}
+      {...props}
+ >
+      {children}
+ </SidebarMenuButton>
+ </AccordionTrigger>
+    )
+
+})
+SidebarCollapsibleButton.displayName = "SidebarCollapsibleButton";
+
+const SidebarCollapsibleContent = React.forwardRef<
+  React.ElementRef<typeof AccordionContent>,
+  React.ComponentPropsWithoutRef<typeof AccordionContent>
+>(({ className, children, ...props }, ref) => (
+  <AccordionContent
+    ref={ref}
+    data-sidebar="collapsible-content"
+    className={cn("data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all", className)}
+    {...props}
+  >
+    {children}
+  </AccordionContent>
+))
+SidebarCollapsibleContent.displayName = "SidebarCollapsibleContent"
+
 export {
+  // Main components
   Sidebar,
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarRail,
+  // Layout components
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
+  SidebarSeparator,
+  // Group components
   SidebarGroup,
   SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
+  // Menu components
   SidebarInput,
   SidebarInset,
   SidebarMenu,
@@ -752,12 +824,14 @@ export {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
+  // Submenu components
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarProvider,
-  SidebarRail,
-  SidebarSeparator,
-  SidebarTrigger,
+  // Collapsible components
+  SidebarCollapsible,
+  SidebarCollapsibleButton,
+  SidebarCollapsibleContent,
+  // Hooks
   useSidebar,
 }
