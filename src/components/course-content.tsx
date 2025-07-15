@@ -36,33 +36,36 @@ const CourseContent = ({
 
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-0 relative">
-      {inProgressSubModules.length > 0 && (
-        <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
-          <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {inProgressSubModules.map((subModule) => (
-              <SubModuleCard key={`${subModule.title}-${Math.random()}`} subModule={subModule} />
-            ))}
+      <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
+          {inProgressSubModules.length > 0 && (
+            <>
+              <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {inProgressSubModules.map((subModule) => (
+                  <SubModuleCard key={`${subModule.title}-${Math.random()}`} subModule={subModule} />
+                ))}
+              </div>
+              <div className="h-8"></div>
+            </>
+          )}
+          
+          <div className="md:hidden space-y-2">
+            <Label htmlFor="subject-selector">Select a Subject</Label>
+            <Select value={activeSubject} onValueChange={onSubjectChange}>
+              <SelectTrigger id="subject-selector" className="w-full">
+                <SelectValue placeholder="Select a subject..." />
+              </SelectTrigger>
+              <SelectContent>
+                {subjects.map(subject => (
+                  <SelectItem key={subject.id} value={subject.id}>
+                    {subject.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <div className="h-8"></div>
-        </div>
-      )}
-      
-      <div className="md:hidden sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 space-y-2">
-        <Label htmlFor="subject-selector">Select a Subject</Label>
-        <Select value={activeSubject} onValueChange={onSubjectChange}>
-          <SelectTrigger id="subject-selector" className="w-full">
-            <SelectValue placeholder="Select a subject..." />
-          </SelectTrigger>
-          <SelectContent>
-            {subjects.map(subject => (
-              <SelectItem key={subject.id} value={subject.id}>
-                {subject.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
+      
 
       <div className="space-y-12">
         {subjects.map((subject, index) => (
