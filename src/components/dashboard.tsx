@@ -24,13 +24,15 @@ import {
   SidebarMenuSubButton,
 } from './ui/sidebar';
 import { Accordion } from './ui/accordion';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { courseData } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import Link from 'next/link';
+import { Progress } from './ui/progress';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
@@ -73,6 +75,20 @@ export function Dashboard() {
   }, []);
   
   const selectedSubject = courseData.find(s => s.id === activeSubject);
+
+  const { totalSubModules, completedSubModules } = useMemo(() => {
+    let total = 0;
+    let completed = 0;
+    courseData.forEach(subject => {
+        subject.modules.forEach(module => {
+            total += module.subModules.length;
+            completed += module.subModules.filter(sm => sm.status === 'completed').length;
+        });
+    });
+    return { totalSubModules: total, completedSubModules: completed };
+  }, []);
+
+  const courseProgress = totalSubModules > 0 ? Math.round((completedSubModules / totalSubModules) * 100) : 0;
 
   return (
     <SidebarProvider>
@@ -151,6 +167,20 @@ export function Dashboard() {
             </Badge>
           </header>
           <div ref={contentAreaRef} className="flex-1 overflow-y-auto">
+             <div className="p-4 md:p-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Course Progress</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex items-center gap-4">
+                            <Progress value={courseProgress} className="w-full" />
+                            <span className="font-semibold text-lg text-primary">{courseProgress}%</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-2">You've completed {completedSubModules} out of {totalSubModules} learning activities.</p>
+                    </CardContent>
+                </Card>
+            </div>
             <CourseContent 
               subjects={courseData}
               subjectRefs={subjectRefs}
