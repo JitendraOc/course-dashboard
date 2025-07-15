@@ -45,7 +45,7 @@ export function Dashboard() {
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              <Accordion type="multiple" defaultValue={['course-materials']}>
+              <Accordion type="multiple" defaultValue={['course-materials']} className="w-full">
                 <SidebarCollapsible value="course-materials">
                   <SidebarCollapsibleButton>
                     <BookOpen />
@@ -98,7 +98,7 @@ export function Dashboard() {
           <header className="flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
             <SidebarTrigger className="md:hidden" />
               <div className="flex-1 flex flex-col">
-              <h1 className="text-lg font-semibold md:text-xl font-headline">Advanced Web Development</h1>
+              <h1 className="text-lg font-semibold md:text-xl font-headline">{selectedSubject.title}</h1>
             </div>
           </header>
           <CourseContent subject={selectedSubject} />
