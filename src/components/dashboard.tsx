@@ -198,6 +198,7 @@ export function Dashboard() {
                         <CardContent className="pt-6">
                             <div className="flex flex-col items-center text-center space-y-4">
                                 <Avatar className="h-20 w-20">
+                                    <AvatarImage data-ai-hint="woman person" src="https://placehold.co/80x80.png" />
                                     <AvatarFallback className="text-2xl">AM</AvatarFallback>
                                 </Avatar>
                                 <div>

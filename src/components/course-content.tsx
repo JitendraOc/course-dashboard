@@ -35,7 +35,7 @@ const CourseContent = ({
   );
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-0 relative">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative">
       <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
           {inProgressSubModules.length > 0 && (
             <>
