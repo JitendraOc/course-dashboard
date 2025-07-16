@@ -43,7 +43,7 @@ export function CourseSection() {
 
             <Card>
                 <CardHeader className="p-4">
-                    <CardTitle className="text-lg font-semibold">Personal Mentor</CardTitle>
+                    <CardTitle className="text-base md:text-lg font-semibold">Personal Mentor</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
                     <div className="flex flex-col items-center text-center space-y-4">
@@ -52,15 +52,15 @@ export function CourseSection() {
                             <AvatarFallback className="text-2xl">OS</AvatarFallback>
                         </Avatar>
                         <div>
-                            <h3 className="text-lg font-semibold">Olivia Smith</h3>
+                            <h3 className="text-base md:text-lg font-semibold">Olivia Smith</h3>
                             <p className="text-sm text-muted-foreground">support@ocacademy.in</p>
                         </div>
                         <div className="w-full space-y-2">
-                            <Button variant="outline" className="w-full">
+                            <Button variant="outline" className="w-full text-sm">
                                 <Mail className="mr-2 h-4 w-4" />
                                 Send an email
                             </Button>
-                            <Button variant="outline" className="w-full">
+                            <Button variant="outline" className="w-full text-sm">
                                 <Phone className="mr-2 h-4 w-4" />
                                 Schedule a call
                             </Button>
@@ -75,7 +75,7 @@ export function CourseSection() {
 
             <Separator />
 
-            <Badge variant="outline" className="w-full flex items-center justify-center gap-2 p-3 text-sm">
+            <Badge variant="outline" className="w-full flex items-center justify-center gap-2 p-3 text-xs md:text-sm">
                 <CalendarClock className="h-5 w-5" />
                 <span>Access ends: Dec 31, 2024</span>
             </Badge>

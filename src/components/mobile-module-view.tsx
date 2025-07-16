@@ -81,7 +81,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                             <ArrowLeft />
                         </Button>
                     </Link>
-                    <h1 className="font-semibold text-lg">{activeSubModule.title}</h1>
+                    <h1 className="font-semibold text-base md:text-lg">{activeSubModule.title}</h1>
                 </div>
             </header>
             
@@ -129,7 +129,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                             <AccordionItem value={module.id} key={module.id} className="border-none">
                                 <AccordionTrigger 
                                     onClick={() => handleModuleChange(module)}
-                                    className="text-lg font-semibold hover:no-underline p-0"
+                                    className="text-base md:text-lg font-semibold hover:no-underline p-0"
                                 >
                                     {module.title}
                                 </AccordionTrigger>
@@ -153,10 +153,10 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                                                             {getIcon(subModule.type, subModule.status, isActive)}
                                                         </div>
                                                         <div className="flex-1">
-                                                            <p className={cn("font-medium", isActive ? "text-primary" : "text-foreground")}>
+                                                            <p className={cn("font-medium text-sm md:text-base", isActive ? "text-primary" : "text-foreground")}>
                                                                 {isActive && "Now Playing: "} {subModule.title}
                                                             </p>
-                                                            <p className="text-sm text-muted-foreground">
+                                                            <p className="text-xs md:text-sm text-muted-foreground">
                                                                 Chapter {index + 1}: {subModule.duration} min
                                                             </p>
                                                         </div>
