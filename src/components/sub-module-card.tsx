@@ -44,7 +44,7 @@ const SubModuleCard = ({ subModule }: SubModuleCardProps) => {
       </CardHeader>
       {hasFooter && (
         <CardFooter>
-          <Button variant="outline" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Resume</Button>
+          <Button variant="default" className="w-full">Resume</Button>
         </CardFooter>
       )}
     </Card>
