@@ -11,7 +11,7 @@ import { Progress } from './ui/progress';
 import { cn } from '@/lib/utils';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { CourseSection } from './course-section';
 
 const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive: boolean) => {
@@ -103,7 +103,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                 </div>
 
                 <Select onValueChange={onSubjectChange} defaultValue={activeSubject.id}>
-                    <SelectTrigger className="w-full bg-secondary">
+                    <SelectTrigger className="w-full bg-secondary border-border/80">
                         <SelectValue placeholder="Select a subject..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -127,12 +127,11 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     <Accordion type="multiple" defaultValue={defaultAccordionValue} className="w-full space-y-4">
                         {activeSubject.modules.map(module => (
                             <AccordionItem value={module.id} key={module.id} className="border-none">
-                                <AccordionTrigger 
-                                    onClick={() => handleModuleChange(module)}
-                                    className="text-base md:text-lg font-semibold hover:no-underline p-0"
-                                >
-                                    {module.title}
-                                </AccordionTrigger>
+                                <div onClick={() => handleModuleChange(module)} className="text-base md:text-lg font-semibold hover:no-underline p-0 cursor-pointer">
+                                    <AccordionTrigger>
+                                        {module.title}
+                                    </AccordionTrigger>
+                                </div>
                                 <AccordionContent className="pt-4">
                                     <ul className="space-y-2">
                                         {module.subModules.map((subModule, index) => {
@@ -185,6 +184,9 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="bottom" className="p-4">
+                    <SheetHeader>
+                        <SheetTitle className="sr-only">Course Section</SheetTitle>
+                    </SheetHeader>
                     <CourseSection />
                 </SheetContent>
             </Sheet>
