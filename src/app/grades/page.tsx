@@ -120,10 +120,10 @@ export default function GradesPage() {
             </Badge>
         </header>
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
-            <Alert className="mb-8 bg-yellow-50 border-yellow-200 text-yellow-800">
-                <AlertTriangle className="h-5 w-5 !text-yellow-500" />
+            <Alert className="mb-8" style={{ backgroundColor: '#fcc22920', borderColor: '#fcc22980', color: '#8c6d1f' }}>
+                <AlertTriangle className="h-5 w-5 !text-yellow-500" style={{ color: '#fcc229' }} />
                 <AlertDescription className="flex items-center gap-2">
-                    <span className="bg-yellow-400 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold">1</span>
+                    <span className="text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#fcc229' }}>1</span>
                     You have 1 assessment coming up. Be sure to submit it before the deadline.
                 </AlertDescription>
             </Alert>
