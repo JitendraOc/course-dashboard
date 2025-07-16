@@ -5,12 +5,14 @@ import { useState, useMemo, useEffect } from 'react';
 import type { Subject, Module, SubModule } from '@/lib/data';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { ArrowLeft, Maximize, PlayCircle, Pause, CircleCheck, FileText, Puzzle, MoreHorizontal } from 'lucide-react';
+import { ArrowLeft, Maximize, PlayCircle, Pause, CircleCheck, FileText, Puzzle, MoreHorizontal, LayoutGrid } from 'lucide-react';
 import Image from 'next/image';
 import { Progress } from './ui/progress';
 import { cn } from '@/lib/utils';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Link from 'next/link';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { CourseSection } from './course-section';
 
 const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive: boolean) => {
     const iconProps = { className: "h-6 w-6" };
@@ -110,7 +112,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                             return (
                                 <SelectItem key={subject.id} value={subject.id}>
                                     <div className="flex justify-between w-full items-center">
-                                        <span className="flex-1">{subject.title}</span>
+                                        <span className="flex-1 mr-4">Sub: {subject.title}</span>
                                         <span className="text-muted-foreground text-xs ml-4">{progress}%</span>
                                     </div>
                                 </SelectItem>
@@ -172,6 +174,20 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     </Accordion>
                 </div>
             </main>
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        className="fixed bottom-4 left-4 h-12 w-12 rounded-full shadow-lg"
+                    >
+                        <LayoutGrid className="h-6 w-6" />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="p-4">
+                    <CourseSection />
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }
