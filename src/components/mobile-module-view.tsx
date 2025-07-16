@@ -109,9 +109,9 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                             const progress = getSubjectProgress(subject);
                             return (
                                 <SelectItem key={subject.id} value={subject.id}>
-                                    <div className="flex justify-between w-full">
-                                        <span>{subject.title}</span>
-                                        <span className="text-muted-foreground">{progress}%</span>
+                                    <div className="flex justify-between w-full items-center">
+                                        <span className="flex-1">{subject.title}</span>
+                                        <span className="text-muted-foreground text-xs">{progress}%</span>
                                     </div>
                                 </SelectItem>
                             )
