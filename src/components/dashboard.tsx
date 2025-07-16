@@ -217,20 +217,15 @@ export function Dashboard() {
                             <div className="flex flex-col items-center text-center space-y-4">
                                 <Avatar className="h-20 w-20">
                                     <AvatarImage data-ai-hint="woman person" src="https://placehold.co/80x80.png" />
-                                    <AvatarFallback className="text-2xl">AM</AvatarFallback>
+                                    <AvatarFallback className="text-2xl">OS</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <h3 className="text-lg font-semibold">Dr. Ananya Murali</h3>
-                                    <p className="text-sm text-muted-foreground">Your Personal Mentor</p>
+                                    <h3 className="text-lg font-semibold">Contact support </h3>
                                 </div>
                                 <div className="w-full space-y-2">
                                     <Button variant="outline" className="w-full">
                                         <Mail className="mr-2 h-4 w-4" />
-                                        ananya.murali@ocacademy.in
-                                    </Button>
-                                    <Button variant="outline" className="w-full">
-                                        <Phone className="mr-2 h-4 w-4" />
-                                        +91-9611376348
+                                        support@ocacademy.in
                                     </Button>
                                 </div>
                                 <div className="flex items-center text-sm text-muted-foreground">

@@ -3,7 +3,7 @@
 
 import React, { type MutableRefObject } from 'react';
 import Link from 'next/link';
-import { Module, SubModule, Subject } from '@/lib/data';
+import { Subject } from '@/lib/data';
 import SubModuleCard from './sub-module-card';
 import { Badge } from './ui/badge';
 import { Book, Clock } from 'lucide-react';
@@ -36,11 +36,11 @@ const CourseContent = ({
 
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative">
-      <div className="sticky top-14 bg-background/95 backdrop-blur-sm z-10 py-4 -my-4 mb-4">
+      <div className="sticky top-10 bg-background/95 backdrop-blur-sm z-10 -my-4 mb-4">
           {inProgressSubModules.length > 0 && (
             <>
               <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 {inProgressSubModules.slice(0, 1).map((subModule) => (
                   <SubModuleCard key={`${subModule.title}-${Math.random()}`} subModule={subModule} />
                 ))}

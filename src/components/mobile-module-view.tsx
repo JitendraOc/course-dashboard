@@ -55,16 +55,13 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
     return (
         <div className="bg-background">
             <header className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm p-4 border-b">
-                 <div className="flex items-center justify-between">
+                 <div className="flex items-center">
                     <Link href="/">
                         <Button variant="ghost" size="icon">
                             <ArrowLeft />
                         </Button>
                     </Link>
                     <h1 className="font-semibold text-lg">{activeSubModule.title}</h1>
-                    <Button variant="ghost" size="icon">
-                        <Maximize />
-                    </Button>
                 </div>
             </header>
             
@@ -92,7 +89,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     <SelectContent>
                         {subjects.map(subject => (
                             <SelectItem key={subject.id} value={subject.id}>
-                                Subject: {subject.title}
+                                {subject.title}
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -149,26 +146,6 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     </Accordion>
                 </div>
             </main>
-            <footer className="sticky bottom-0 z-20 bg-background border-t p-2">
-                <nav className="flex justify-around">
-                    <Button variant="ghost" className="flex flex-col h-auto items-center gap-1 text-muted-foreground">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        <span>Home</span>
-                    </Button>
-                     <Button variant="ghost" className="flex flex-col h-auto items-center gap-1 text-primary">
-                        <PlayCircle className="h-6 w-6" />
-                        <span>Courses</span>
-                    </Button>
-                     <Button variant="ghost" className="flex flex-col h-auto items-center gap-1 text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
-                        <span>Bookmarks</span>
-                    </Button>
-                     <Button variant="ghost" className="flex flex-col h-auto items-center gap-1 text-muted-foreground">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
-                        <span>Profile</span>
-                    </Button>
-                </nav>
-            </footer>
         </div>
     );
 }
