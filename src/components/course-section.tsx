@@ -27,7 +27,7 @@ export function CourseSection() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-lg font-semibold font-headline mb-4">Course Section</h2>
+            <h2 className="text-lg font-semibold font-headline mb-4 md:hidden">Course Section</h2>
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base md:text-lg">Course Progress</CardTitle>

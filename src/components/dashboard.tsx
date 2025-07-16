@@ -180,7 +180,7 @@ export function Dashboard() {
           <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
-              <h1 className="text-lg font-semibold md:text-xl font-headline">Course Dashboard</h1>
+              <h1 className="text-lg font-semibold md:text-xl font-headline">Fullstack Developer Course</h1>
             </div>
           </header>
           <div ref={contentAreaRef} className="flex flex-1">
