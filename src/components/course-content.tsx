@@ -81,7 +81,7 @@ const CourseContent = ({
                   {subject.learningObjective ? subject.learningObjective : "Explore the modules within this subject to achieve the course's overall learning objectives."}
                 </p>
               </div>
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
                 {subject.modules.map((module) => {
                   const totalDuration = module.subModules.reduce((acc, sm) => acc + sm.duration, 0);
                   return (
