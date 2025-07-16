@@ -71,7 +71,7 @@ const CourseContent = ({
                   return (
                     <Link href={`/modules/${module.id}`} key={module.id} className="block">
                       <div
-                        className="rounded-lg bg-card p-4 shadow-sm hover:bg-accent/50 cursor-pointer flex items-center gap-4 h-full"
+                        className="rounded-lg bg-card p-4 shadow-sm hover:bg-sidebar-accent cursor-pointer flex items-center gap-4 h-full"
                       >
                         <div className="bg-primary/10 p-3 rounded-full">
                           <Book className="h-6 w-6 text-primary" />
