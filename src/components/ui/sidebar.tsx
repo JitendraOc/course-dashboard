@@ -762,13 +762,12 @@ const SidebarCollapsible = React.forwardRef<
 SidebarCollapsible.displayName = "SidebarCollapsible"
 
 const SidebarCollapsibleButton = React.forwardRef<
-  React.ElementRef<typeof SidebarMenuButton>,
-  React.ComponentPropsWithoutRef<typeof SidebarMenuButton>
+  React.ElementRef<typeof AccordionTrigger>,
+  Omit<React.ComponentPropsWithoutRef<typeof SidebarMenuButton>, "asChild">
 >(({ className, children, ...props }, ref) => {
   return (
-    <AccordionTrigger asChild className="group/collapsible-button">
+    <AccordionTrigger asChild ref={ref} className="group/collapsible-button">
       <SidebarMenuButton
-        ref={ref}
         data-sidebar="collapsible-button"
         className={cn(
           "justify-between",
