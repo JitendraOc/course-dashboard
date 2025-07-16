@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -12,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileModuleView } from '@/components/mobile-module-view';
 
 const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive: boolean) => {
     const iconProps = { className: "h-8 w-8 shrink-0" };
@@ -45,6 +48,8 @@ export default function ModulePage() {
   const params = useParams();
   const router = useRouter();
   const { moduleId } = params;
+  const isMobile = useIsMobile();
+
 
   const { currentModule, parentSubject } = useMemo(() => {
     for (const subject of courseData) {
@@ -104,43 +109,28 @@ export default function ModulePage() {
     );
   }
 
+  if (isMobile) {
+    return (
+        <MobileModuleView 
+            subjects={courseData}
+            activeSubject={parentSubject}
+            onSubjectChange={(subjectId) => {
+                const newSubject = courseData.find(s => s.id === subjectId);
+                if (newSubject) {
+                    // Navigate to the first module of the new subject
+                    router.push(`/modules/${newSubject.modules[0].id}`);
+                }
+            }}
+        />
+    )
+  }
+
   const isFirstSubModuleInCourse = currentIndex === 0;
   const isLastSubModuleInCourse = currentIndex === allSubModulesInCourse.length - 1;
   const videoProgress = 20;
 
   return (
     <div className="flex h-screen bg-background flex-col md:flex-row">
-      <div className="md:hidden">
-        {activeSubModule && (
-            <div className="p-4 bg-card">
-                 <header className="flex items-center justify-between mb-4">
-                    <Button variant="ghost" size="icon" onClick={() => router.push('/')}>
-                        <ArrowLeft />
-                    </Button>
-                    <h1 className="font-semibold text-lg">{activeSubModule.title}</h1>
-                    <Button variant="ghost" size="icon">
-                        <Maximize />
-                    </Button>
-                </header>
-                <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image src="https://placehold.co/1600x900.png" alt="Video thumbnail" layout="fill" objectFit="cover" data-ai-hint="lesson thumbnail" />
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <button className="bg-white/30 backdrop-blur-sm text-white rounded-full p-4">
-                            <PlayCircle className="h-8 w-8" />
-                        </button>
-                    </div>
-                    <div className="absolute bottom-2 left-2 right-2 text-white text-xs">
-                        <div className="flex justify-between items-center">
-                            <span>1:23 / 10:45</span>
-                            <span>CC</span>
-                        </div>
-                        <Progress value={videoProgress} className="h-1 bg-white/30 [&>div]:bg-white" />
-                    </div>
-                </div>
-            </div>
-        )}
-      </div>
-
       <aside className="w-full md:w-80 border-r border-border flex flex-col">
         <div className="p-4 border-b hidden md:block">
             <h1 className="text-lg font-headline font-semibold">{parentSubject.title}</h1>

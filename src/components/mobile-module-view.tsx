@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { Subject, Module, SubModule } from '@/lib/data';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -43,13 +43,20 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
     const [activeModule, setActiveModule] = useState<Module>(activeSubject.modules[0]);
     const [activeSubModule, setActiveSubModule] = useState<SubModule>(activeModule.subModules[0]);
 
+    useEffect(() => {
+        setActiveModule(activeSubject.modules[0]);
+        setActiveSubModule(activeSubject.modules[0].subModules[0]);
+    }, [activeSubject]);
+
     const videoProgress = 20; // Example progress
 
     const handleModuleChange = (module: Module) => {
         setActiveModule(module);
-        setActiveSubModule(module.subModules[0]);
+        if(activeModule.id !== module.id) {
+            setActiveSubModule(module.subModules[0]);
+        }
     }
-
+    
     const defaultAccordionValue = useMemo(() => activeSubject.modules.map(m => m.id), [activeSubject]);
 
     return (
@@ -149,5 +156,3 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
         </div>
     );
 }
-
-    
