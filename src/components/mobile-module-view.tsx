@@ -71,7 +71,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
     const defaultAccordionValue = useMemo(() => activeSubject.modules.map(m => m.id), [activeSubject]);
 
     return (
-        <div className="bg-background">
+        <div className="bg-background min-h-screen">
             <header className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm p-4 border-b">
                  <div className="flex items-center">
                     <Link href="/">
@@ -83,7 +83,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                 </div>
             </header>
             
-            <main className="p-4">
+            <div className="sticky top-[73px] z-10 bg-background/95 backdrop-blur-sm p-4 pt-0">
                 <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center overflow-hidden mb-4">
                     <Image src="https://placehold.co/1600x900.png" alt="Video thumbnail" layout="fill" objectFit="cover" data-ai-hint="lesson thumbnail" />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
@@ -111,15 +111,17 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                                 <SelectItem key={subject.id} value={subject.id}>
                                     <div className="flex justify-between w-full items-center">
                                         <span className="flex-1">{subject.title}</span>
-                                        <span className="text-muted-foreground text-xs">{progress}%</span>
+                                        <span className="text-muted-foreground text-xs ml-4">{progress}%</span>
                                     </div>
                                 </SelectItem>
                             )
                         })}
                     </SelectContent>
                 </Select>
-
-                <div className="mt-6">
+            </div>
+            
+            <main className="p-4">
+                <div className="mt-2">
                     <Accordion type="multiple" defaultValue={defaultAccordionValue} className="w-full space-y-4">
                         {activeSubject.modules.map(module => (
                             <AccordionItem value={module.id} key={module.id} className="border-none">
