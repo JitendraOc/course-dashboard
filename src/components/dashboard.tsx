@@ -34,6 +34,7 @@ import { Badge } from './ui/badge';
 import Link from 'next/link';
 import { Progress } from './ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Separator } from './ui/separator';
 
 export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
@@ -118,8 +119,9 @@ export function Dashboard() {
                             key={subject.id}
                             onClick={() => handleSubjectClick(subject.id)}
                             isActive={activeSubject === subject.id}
-                            className="whitespace-normal h-auto py-2 text-sm"
+                            className="whitespace-normal h-auto py-2 text-sm relative"
                           >
+                            {activeSubject === subject.id && <div className="absolute left-[-9px] top-0 h-full w-1 bg-primary rounded-r-full"></div>}
                             {subject.title}
                           </SidebarMenuSubButton>
                       ))}
@@ -158,37 +160,45 @@ export function Dashboard() {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
               <h1 className="text-lg font-semibold md:text-xl font-headline">Course Dashboard</h1>
             </div>
-            <Badge variant="outline" className="flex items-center gap-2">
-              <CalendarClock className="h-4 w-4" />
-              <span>Access ends: December 31, 2024</span>
-            </Badge>
           </header>
-          <div ref={contentAreaRef} className="flex-1 overflow-y-auto">
-             <div className="p-4 md:p-8">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-xl md:text-2xl">Course Progress</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center gap-4">
-                            <Progress value={courseProgress} className="w-full" />
-                            <span className="font-semibold text-base md:text-lg text-primary">{courseProgress}%</span>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-2">You've completed {completedSubModules} out of {totalSubModules} learning activities.</p>
-                    </CardContent>
-                </Card>
+          <div ref={contentAreaRef} className="flex flex-1">
+            <div className="flex-1 overflow-y-auto">
+                <CourseContent 
+                subjects={courseData}
+                subjectRefs={subjectRefs}
+                activeSubject={activeSubject}
+                onSubjectChange={handleSubjectClick}
+                />
             </div>
-            <CourseContent 
-              subjects={courseData}
-              subjectRefs={subjectRefs}
-              activeSubject={activeSubject}
-              onSubjectChange={handleSubjectClick}
-            />
+            <aside className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+                <h2 className="text-lg font-semibold font-headline mb-4">Course Section</h2>
+                <div className="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-base md:text-lg">Course Progress</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex items-center gap-4">
+                                <Progress value={courseProgress} className="w-full" />
+                                <span className="font-semibold text-sm md:text-base text-primary">{courseProgress}%</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-2">You've completed {completedSubModules} out of {totalSubModules} learning activities.</p>
+                        </CardContent>
+                    </Card>
+
+                    <Separator />
+
+                    <Badge variant="outline" className="w-full flex items-center justify-center gap-2 p-3 text-sm">
+                        <CalendarClock className="h-5 w-5" />
+                        <span>Access ends: Dec 31, 2024</span>
+                    </Badge>
+                </div>
+            </aside>
           </div>
         </SidebarInset>
       </div>
