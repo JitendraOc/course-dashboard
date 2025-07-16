@@ -101,7 +101,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                 </div>
 
                 <Select onValueChange={onSubjectChange} defaultValue={activeSubject.id}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-secondary">
                         <SelectValue placeholder="Select a subject..." />
                     </SelectTrigger>
                     <SelectContent>
