@@ -6,6 +6,9 @@ import {
   GraduationCap,
   Users,
   Zap,
+  Mail,
+  Phone,
+  Clock
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -188,6 +191,34 @@ export function Dashboard() {
                                 <span className="font-semibold text-sm md:text-base text-primary">{courseProgress}%</span>
                             </div>
                             <p className="text-xs text-muted-foreground mt-2">You've completed {completedSubModules} out of {totalSubModules} learning activities.</p>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardContent className="pt-6">
+                            <div className="flex flex-col items-center text-center space-y-4">
+                                <Avatar className="h-20 w-20">
+                                    <AvatarFallback className="text-2xl">AM</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <h3 className="text-lg font-semibold">Dr. Ananya Murali</h3>
+                                    <p className="text-sm text-muted-foreground">Your Personal Mentor</p>
+                                </div>
+                                <div className="w-full space-y-2">
+                                    <Button variant="outline" className="w-full">
+                                        <Mail className="mr-2 h-4 w-4" />
+                                        ananya.murali@ocacademy.in
+                                    </Button>
+                                    <Button variant="outline" className="w-full">
+                                        <Phone className="mr-2 h-4 w-4" />
+                                        +91-9611376348
+                                    </Button>
+                                </div>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="mr-2 h-4 w-4" />
+                                    <span>10:00 AM - 6:00 PM</span>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
 
