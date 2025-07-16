@@ -137,10 +137,10 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                                             const isActive = activeSubModule?.title === subModule.title && module.id === activeModule.id;
                                             return (
                                                 <li key={index}>
-                                                    <button
+                                                    <div
                                                         onClick={() => setActiveSubModule(subModule)}
                                                         className={cn(
-                                                            "w-full text-left p-3 rounded-lg flex items-center gap-4 transition-all",
+                                                            "w-full text-left p-3 rounded-lg flex items-center gap-4 transition-all cursor-pointer",
                                                             isActive ? "bg-primary/10 border border-primary/20 shadow-sm" : ""
                                                         )}
                                                     >
@@ -158,10 +158,10 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                                                                 Chapter {index + 1}: {subModule.duration} min
                                                             </p>
                                                         </div>
-                                                        <Button variant="ghost" size="icon" className="text-muted-foreground">
+                                                        <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={(e) => { e.stopPropagation(); /* handle more options */ }}>
                                                             <MoreHorizontal className="h-5 w-5" />
                                                         </Button>
-                                                    </button>
+                                                    </div>
                                                 </li>
                                             )
                                         })}
