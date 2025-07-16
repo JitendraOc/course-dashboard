@@ -39,6 +39,17 @@ const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive:
     }
 };
 
+const getSubjectProgress = (subject: Subject) => {
+    let totalSubModules = 0;
+    let completedSubModules = 0;
+    subject.modules.forEach(module => {
+        totalSubModules += module.subModules.length;
+        completedSubModules += module.subModules.filter(sm => sm.status === 'completed').length;
+    });
+    if (totalSubModules === 0) return 0;
+    return Math.round((completedSubModules / totalSubModules) * 100);
+}
+
 export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: { subjects: Subject[], activeSubject: Subject, onSubjectChange: (subjectId: string) => void }) {
     const [activeModule, setActiveModule] = useState<Module>(activeSubject.modules[0]);
     const [activeSubModule, setActiveSubModule] = useState<SubModule>(activeModule.subModules[0]);
@@ -94,11 +105,17 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                         <SelectValue placeholder="Select a subject..." />
                     </SelectTrigger>
                     <SelectContent>
-                        {subjects.map(subject => (
-                            <SelectItem key={subject.id} value={subject.id}>
-                                {subject.title}
-                            </SelectItem>
-                        ))}
+                        {subjects.map(subject => {
+                            const progress = getSubjectProgress(subject);
+                            return (
+                                <SelectItem key={subject.id} value={subject.id}>
+                                    <div className="flex justify-between w-full">
+                                        <span>{subject.title}</span>
+                                        <span className="text-muted-foreground">{progress}%</span>
+                                    </div>
+                                </SelectItem>
+                            )
+                        })}
                     </SelectContent>
                 </Select>
 

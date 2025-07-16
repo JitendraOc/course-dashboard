@@ -29,7 +29,7 @@ import {
 } from './ui/sidebar';
 import { Accordion } from './ui/accordion';
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { courseData } from '@/lib/data';
+import { courseData, type Subject } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import CourseContent from './course-content';
 import { Button } from './ui/button';
@@ -40,6 +40,18 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from './mobile-module-view';
+
+const getSubjectProgress = (subject: Subject) => {
+    let totalSubModules = 0;
+    let completedSubModules = 0;
+    subject.modules.forEach(module => {
+        totalSubModules += module.subModules.length;
+        completedSubModules += module.subModules.filter(sm => sm.status === 'completed').length;
+    });
+    if (totalSubModules === 0) return 0;
+    return Math.round((completedSubModules / totalSubModules) * 100);
+}
+
 
 export function Dashboard() {
   const isMobile = useIsMobile();
@@ -135,17 +147,21 @@ export function Dashboard() {
                   </SidebarCollapsibleButton>
                   <SidebarCollapsibleContent>
                     <SidebarMenuSub>
-                      {courseData.map((subject) => (
+                      {courseData.map((subject) => {
+                        const progress = getSubjectProgress(subject);
+                        return (
                           <SidebarMenuSubButton 
                             key={subject.id}
                             onClick={() => handleSubjectChange(subject.id)}
                             isActive={activeSubject === subject.id}
-                            className="whitespace-normal h-auto py-2 text-sm relative"
+                            className="whitespace-normal h-auto py-2 text-sm relative justify-between"
                           >
+                            <span className="flex-1 text-left">{subject.title}</span>
+                             <span className="text-xs text-muted-foreground">{progress}%</span>
                             {activeSubject === subject.id && <div className="absolute left-[-9px] top-0 h-full w-1 bg-primary rounded-r-full"></div>}
-                            {subject.title}
                           </SidebarMenuSubButton>
-                      ))}
+                        )
+                      })}
                     </SidebarMenuSub>
                   </SidebarCollapsibleContent>
                 </SidebarCollapsible>
@@ -213,19 +229,27 @@ export function Dashboard() {
                     </Card>
 
                     <Card>
-                        <CardContent className="pt-6">
+                        <CardHeader className="p-4">
+                            <CardTitle className="text-lg font-semibold">Personal Mentor</CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-4 pt-0">
                             <div className="flex flex-col items-center text-center space-y-4">
                                 <Avatar className="h-20 w-20">
                                     <AvatarImage data-ai-hint="woman person" src="https://placehold.co/80x80.png" />
                                     <AvatarFallback className="text-2xl">OS</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <h3 className="text-lg font-semibold">Contact support </h3>
+                                    <h3 className="text-lg font-semibold">Olivia Smith</h3>
+                                    <p className="text-sm text-muted-foreground">support@ocacademy.in</p>
                                 </div>
                                 <div className="w-full space-y-2">
                                     <Button variant="outline" className="w-full">
                                         <Mail className="mr-2 h-4 w-4" />
-                                        support@ocacademy.in
+                                        Send an email
+                                    </Button>
+                                    <Button variant="outline" className="w-full">
+                                        <Phone className="mr-2 h-4 w-4" />
+                                        Schedule a call
                                     </Button>
                                 </div>
                                 <div className="flex items-center text-sm text-muted-foreground">
@@ -250,5 +274,3 @@ export function Dashboard() {
     </SidebarProvider>
   );
 }
-
-    
