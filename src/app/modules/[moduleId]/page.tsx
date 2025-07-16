@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -5,28 +6,40 @@ import { useState, useMemo, useCallback } from 'react';
 import { courseData } from '@/lib/data';
 import type { SubModule } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { CircleCheck, FileText, PlayCircle, Puzzle, ChevronRight } from 'lucide-react';
+import { CircleCheck, FileText, PlayCircle, Puzzle, ChevronRight, ArrowLeft, Maximize, Pause } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Image from 'next/image';
+import { Progress } from '@/components/ui/progress';
 
-const getIcon = (type: SubModule['type'], status: SubModule['status']) => {
-    const iconProps = { className: "h-5 w-5 shrink-0" };
+const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive: boolean) => {
+    const iconProps = { className: "h-8 w-8 shrink-0" };
+
+    if (isActive) {
+        return (
+            <div className="relative flex items-center justify-center">
+                 <Pause {...iconProps} className="text-primary-foreground" />
+            </div>
+        )
+    }
+
     if (status === 'completed') {
       return <CircleCheck {...iconProps} className={`${iconProps.className} text-green-600`} />;
     }
-    const colorClass = "text-muted-foreground";
+
     switch (type) {
       case 'video':
-        return <PlayCircle {...iconProps} className={`${iconProps.className} ${colorClass}`} />;
+        return <PlayCircle {...iconProps} />;
       case 'epub':
-        return <FileText {...iconProps} className={`${iconProps.className} ${colorClass}`} />;
+        return <FileText {...iconProps} />;
       case 'plugin':
-        return <Puzzle {...iconProps} className={`${iconProps.className} ${colorClass}`} />;
+        return <Puzzle {...iconProps} />;
       default:
         return null;
     }
 };
+
 
 export default function ModulePage() {
   const params = useParams();
@@ -93,11 +106,43 @@ export default function ModulePage() {
 
   const isFirstSubModuleInCourse = currentIndex === 0;
   const isLastSubModuleInCourse = currentIndex === allSubModulesInCourse.length - 1;
+  const videoProgress = 20;
 
   return (
-    <div className="flex h-screen bg-background">
-      <aside className="w-80 border-r border-border flex flex-col">
-        <div className="p-4 border-b">
+    <div className="flex h-screen bg-background flex-col md:flex-row">
+      <div className="md:hidden">
+        {activeSubModule && (
+            <div className="p-4 bg-card">
+                 <header className="flex items-center justify-between mb-4">
+                    <Button variant="ghost" size="icon" onClick={() => router.push('/')}>
+                        <ArrowLeft />
+                    </Button>
+                    <h1 className="font-semibold text-lg">{activeSubModule.title}</h1>
+                    <Button variant="ghost" size="icon">
+                        <Maximize />
+                    </Button>
+                </header>
+                <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                    <Image src="https://placehold.co/1600x900.png" alt="Video thumbnail" layout="fill" objectFit="cover" data-ai-hint="lesson thumbnail" />
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <button className="bg-white/30 backdrop-blur-sm text-white rounded-full p-4">
+                            <PlayCircle className="h-8 w-8" />
+                        </button>
+                    </div>
+                    <div className="absolute bottom-2 left-2 right-2 text-white text-xs">
+                        <div className="flex justify-between items-center">
+                            <span>1:23 / 10:45</span>
+                            <span>CC</span>
+                        </div>
+                        <Progress value={videoProgress} className="h-1 bg-white/30 [&>div]:bg-white" />
+                    </div>
+                </div>
+            </div>
+        )}
+      </div>
+
+      <aside className="w-full md:w-80 border-r border-border flex flex-col">
+        <div className="p-4 border-b hidden md:block">
             <h1 className="text-lg font-headline font-semibold">{parentSubject.title}</h1>
             <Link href="/" className="text-sm text-primary hover:underline">
                 Back to course
@@ -111,28 +156,39 @@ export default function ModulePage() {
                             {module.title}
                         </AccordionTrigger>
                         <AccordionContent>
-                            <ul className="p-2 pt-0">
-                                {module.subModules.map((subModule, index) => (
-                                <li key={index}>
-                                    <button
-                                    onClick={() => {
-                                        if (module.id !== currentModule.id) {
-                                            router.push(`/modules/${module.id}`);
-                                        } else {
-                                            setActiveSubModule(subModule);
-                                        }
-                                    }}
-                                    className={cn(
-                                        "w-full text-left p-3 rounded-md flex items-center gap-3 transition-colors",
-                                        activeSubModule?.title === subModule.title && module.id === currentModule.id ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
-                                    )}
-                                    >
-                                    {getIcon(subModule.type, subModule.status)}
-                                    <span className="flex-1 text-sm">{subModule.title}</span>
-                                    <span className="text-xs text-muted-foreground">{subModule.duration} min</span>
-                                    </button>
-                                </li>
-                                ))}
+                            <ul className="p-2 pt-0 space-y-1">
+                                {module.subModules.map((subModule, index) => {
+                                  const isActive = activeSubModule?.title === subModule.title && module.id === currentModule.id;
+                                  return (
+                                    <li key={index}>
+                                        <button
+                                        onClick={() => {
+                                            if (module.id !== currentModule.id) {
+                                                router.push(`/modules/${module.id}`);
+                                            } else {
+                                                setActiveSubModule(subModule);
+                                            }
+                                        }}
+                                        className={cn(
+                                            "w-full text-left p-3 rounded-md flex items-center gap-3 transition-colors",
+                                            isActive ? "bg-primary/10 text-primary" : "hover:bg-accent/50"
+                                        )}
+                                        >
+                                            <div className={cn(
+                                                "h-12 w-12 rounded-lg flex items-center justify-center shrink-0",
+                                                isActive ? 'bg-primary' : 'bg-muted'
+                                            )}>
+                                                {getIcon(subModule.type, subModule.status, isActive)}
+                                            </div>
+
+                                            <div className="flex-1 text-sm">
+                                                <p className={cn("font-medium", isActive && "text-primary")}>{subModule.title}</p>
+                                                <p className="text-xs text-muted-foreground">Chapter {index + 1}: {subModule.duration} min</p>
+                                            </div>
+                                        </button>
+                                    </li>
+                                  )
+                                })}
                             </ul>
                         </AccordionContent>
                     </AccordionItem>
@@ -140,7 +196,7 @@ export default function ModulePage() {
             </Accordion>
         </nav>
       </aside>
-      <main className="flex-1 flex flex-col">
+      <main className="hidden md:flex flex-1 flex-col">
         {activeSubModule ? (
           <div className="flex-1 flex flex-col">
             <header className="p-4 border-b">
@@ -186,3 +242,5 @@ export default function ModulePage() {
     </div>
   );
 }
+
+    

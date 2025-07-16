@@ -38,21 +38,28 @@ import Link from 'next/link';
 import { Progress } from './ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileModuleView } from './mobile-module-view';
 
 export function Dashboard() {
+  const isMobile = useIsMobile();
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
   const contentAreaRef = useRef<HTMLDivElement>(null);
   const subjectRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleSubjectClick = (subjectId: string) => {
+  const handleSubjectChange = (subjectId: string) => {
     setActiveSubject(subjectId);
-    subjectRefs.current[subjectId]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    if (!isMobile) {
+      subjectRefs.current[subjectId]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   };
 
   useEffect(() => {
+    if (isMobile) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -77,9 +84,9 @@ export function Dashboard() {
         if (ref) observer.unobserve(ref);
       });
     };
-  }, []);
+  }, [isMobile]);
   
-  const selectedSubject = courseData.find(s => s.id === activeSubject);
+  const selectedSubject = useMemo(() => courseData.find(s => s.id === activeSubject), [activeSubject]);
 
   const { totalSubModules, completedSubModules } = useMemo(() => {
     let total = 0;
@@ -94,6 +101,17 @@ export function Dashboard() {
   }, []);
 
   const courseProgress = totalSubModules > 0 ? Math.round((completedSubModules / totalSubModules) * 100) : 0;
+  
+  if (isMobile) {
+    return (
+        <MobileModuleView 
+            subjects={courseData}
+            activeSubject={selectedSubject || courseData[0]}
+            onSubjectChange={handleSubjectChange}
+        />
+    )
+  }
+
 
   return (
     <SidebarProvider>
@@ -120,7 +138,7 @@ export function Dashboard() {
                       {courseData.map((subject) => (
                           <SidebarMenuSubButton 
                             key={subject.id}
-                            onClick={() => handleSubjectClick(subject.id)}
+                            onClick={() => handleSubjectChange(subject.id)}
                             isActive={activeSubject === subject.id}
                             className="whitespace-normal h-auto py-2 text-sm relative"
                           >
@@ -175,7 +193,7 @@ export function Dashboard() {
                 subjects={courseData}
                 subjectRefs={subjectRefs}
                 activeSubject={activeSubject}
-                onSubjectChange={handleSubjectClick}
+                onSubjectChange={handleSubjectChange}
                 />
             </div>
             <aside className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
@@ -237,3 +255,5 @@ export function Dashboard() {
     </SidebarProvider>
   );
 }
+
+    
