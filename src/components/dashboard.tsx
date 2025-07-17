@@ -6,6 +6,7 @@ import {
   GraduationCap,
   Users,
   Zap,
+  RefreshCcw,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -76,6 +77,17 @@ export function Dashboard() {
         behavior: 'smooth',
         block: 'start',
       });
+    }
+  };
+
+  const handleRestartTour = () => {
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem('hasSeenTour');
+        // A small timeout to allow state to update before starting the tour
+        setTimeout(() => {
+            setRunTour(true);
+            localStorage.setItem('hasSeenTour', 'true');
+        }, 100);
     }
   };
 
@@ -176,6 +188,12 @@ export function Dashboard() {
                 <SidebarMenuButton tooltip="Contact Info">
                   <Users />
                   Contact Info
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Restart Tour" onClick={handleRestartTour}>
+                  <RefreshCcw />
+                  Restart Tour
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
