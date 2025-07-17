@@ -33,7 +33,7 @@ export function AppTour({ run }: AppTourProps) {
         {
             target: '#tour-step-4',
             content: 'All the modules for the selected subject are listed here. Click on any module to start learning!',
-            placement: 'top',
+            placement: 'right',
         },
     ];
 
