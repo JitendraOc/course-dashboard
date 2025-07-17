@@ -73,9 +73,7 @@ export function CourseSection() {
                 </CardContent>
             </Card>
 
-            <Separator />
-
-            <Badge variant="outline" className="w-full flex items-center justify-center gap-2 p-3 text-xs md:text-sm">
+            <Badge variant="darkOutline" className="w-full flex items-center justify-center gap-2 p-3 text-xs md:text-sm">
                 <CalendarClock className="h-5 w-5" />
                 <span>Access ends: Dec 31, 2024</span>
             </Badge>

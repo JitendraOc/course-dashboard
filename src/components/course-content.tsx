@@ -36,7 +36,7 @@ const CourseContent = ({
 
   return (
     <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative">
-      <div className="sticky top-10 bg-background/95 backdrop-blur-sm z-10 -my-4 mb-4">
+      <div id="tour-step-2" className="sticky top-10 bg-background/95 backdrop-blur-sm z-10 -my-4 mb-4">
           {inProgressSubModules.length > 0 && (
             <>
               <h2 className="text-xl md:text-2xl font-headline font-semibold mb-4">Continue where you left off</h2>
@@ -51,7 +51,7 @@ const CourseContent = ({
       </div>
       
 
-      <div className="space-y-12">
+      <div id="tour-step-4" className="space-y-12">
         {subjects.map((subject, index) => (
           <React.Fragment key={subject.id}>
              {index > 0 && <Separator className="my-8" />}

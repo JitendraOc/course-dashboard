@@ -34,6 +34,7 @@ import Link from 'next/link';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from './mobile-module-view';
 import { CourseSection } from './course-section';
+import { AppTour } from './app-tour';
 
 const getSubjectProgress = (subject: Subject) => {
     let totalSubModules = 0;
@@ -52,6 +53,18 @@ export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
   const contentAreaRef = useRef<HTMLDivElement>(null);
   const subjectRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [showTour, setShowTour] = useState(false);
+
+  useEffect(() => {
+    // Only run this on the client
+    if (typeof window !== 'undefined') {
+      const hasSeenTour = localStorage.getItem('hasSeenTour');
+      if (!hasSeenTour) {
+        setShowTour(true);
+        localStorage.setItem('hasSeenTour', 'true');
+      }
+    }
+  }, []);
 
   const handleSubjectChange = (subjectId: string) => {
     setActiveSubject(subjectId);
@@ -107,8 +120,9 @@ export function Dashboard() {
 
   return (
     <SidebarProvider>
+      <AppTour run={showTour} />
       <div className="flex min-h-screen">
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible="icon" id="tour-step-1">
           <SidebarHeader>
             <div className="flex items-center gap-2 p-2">
               <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -177,7 +191,7 @@ export function Dashboard() {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+          <header id="tour-step-0" className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
               <h1 className="text-lg font-semibold md:text-xl font-headline">Fullstack Developer Course</h1>
@@ -192,7 +206,7 @@ export function Dashboard() {
                 onSubjectChange={handleSubjectChange}
                 />
             </div>
-            <aside className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+            <aside id="tour-step-3" className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
                 <CourseSection />
             </aside>
           </div>
