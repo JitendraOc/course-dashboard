@@ -53,14 +53,17 @@ export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
   const contentAreaRef = useRef<HTMLDivElement>(null);
   const subjectRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const [showTour, setShowTour] = useState(false);
+  const [runTour, setRunTour] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
 
   useEffect(() => {
     // Only run this on the client
+    setIsClient(true);
     if (typeof window !== 'undefined') {
       const hasSeenTour = localStorage.getItem('hasSeenTour');
       if (!hasSeenTour) {
-        setShowTour(true);
+        setRunTour(true);
         localStorage.setItem('hasSeenTour', 'true');
       }
     }
@@ -120,7 +123,7 @@ export function Dashboard() {
 
   return (
     <SidebarProvider>
-      <AppTour run={showTour} />
+      {isClient && <AppTour run={runTour} />}
       <div className="flex min-h-screen">
         <Sidebar collapsible="icon" id="tour-step-1">
           <SidebarHeader>
