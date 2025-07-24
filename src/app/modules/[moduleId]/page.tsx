@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from '@/components/mobile-module-view';
+import { MobileNavBar } from '@/components/mobile-nav-bar';
 
 const getIcon = (type: SubModule['type'], status: SubModule['status'], isActive: boolean) => {
     const iconProps = { className: "h-8 w-8 shrink-0" };
@@ -111,17 +112,20 @@ export default function ModulePage() {
 
   if (isMobile) {
     return (
-        <MobileModuleView 
-            subjects={courseData}
-            activeSubject={parentSubject}
-            onSubjectChange={(subjectId) => {
-                const newSubject = courseData.find(s => s.id === subjectId);
-                if (newSubject) {
-                    // Navigate to the first module of the new subject
-                    router.push(`/modules/${newSubject.modules[0].id}`);
-                }
-            }}
-        />
+        <>
+            <MobileModuleView 
+                subjects={courseData}
+                activeSubject={parentSubject}
+                onSubjectChange={(subjectId) => {
+                    const newSubject = courseData.find(s => s.id === subjectId);
+                    if (newSubject) {
+                        // Navigate to the first module of the new subject
+                        router.push(`/modules/${newSubject.modules[0].id}`);
+                    }
+                }}
+            />
+            <MobileNavBar />
+        </>
     )
   }
 
@@ -232,5 +236,3 @@ export default function ModulePage() {
     </div>
   );
 }
-
-    

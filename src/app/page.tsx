@@ -6,6 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from '@/components/mobile-module-view';
 import { courseData } from '@/lib/data';
 import { useState } from 'react';
+import { MobileNavBar } from '@/components/mobile-nav-bar';
 
 
 export default function Home() {
@@ -13,14 +14,19 @@ export default function Home() {
   const [activeSubject, setActiveSubject] = useState(courseData[0]);
 
   if (isMobile) {
-    return <MobileModuleView 
-      subjects={courseData} 
-      activeSubject={activeSubject}
-      onSubjectChange={(subjectId) => {
-        const newSubject = courseData.find(s => s.id === subjectId);
-        if (newSubject) setActiveSubject(newSubject);
-      }}
-    />
+    return (
+      <div className="pb-16">
+        <MobileModuleView 
+          subjects={courseData} 
+          activeSubject={activeSubject}
+          onSubjectChange={(subjectId) => {
+            const newSubject = courseData.find(s => s.id === subjectId);
+            if (newSubject) setActiveSubject(newSubject);
+          }}
+        />
+        <MobileNavBar />
+      </div>
+    )
   }
 
   return (
@@ -29,5 +35,3 @@ export default function Home() {
     </main>
   );
 }
-
-    

@@ -84,6 +84,7 @@ export function Dashboard() {
   const handleRestartTour = () => {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('hasSeenTour');
+        setRunTour(false);
         // A small timeout to allow state to update before starting the tour
         setTimeout(() => {
             setRunTour(true);
@@ -125,14 +126,14 @@ export function Dashboard() {
 
   if (isMobile) {
     return (
-      <>
+      <div className="pb-16">
         <MobileModuleView 
             subjects={courseData}
             activeSubject={selectedSubject || courseData[0]}
             onSubjectChange={handleSubjectChange}
         />
         <MobileNavBar />
-      </>
+      </div>
     )
   }
 
