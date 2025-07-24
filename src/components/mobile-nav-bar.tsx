@@ -39,7 +39,7 @@ export function MobileNavBar() {
     return (
         <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border">
             <div className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground">
+                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground border-r border-border">
                      <div className="w-full flex items-center gap-2">
                         <div className="w-8 h-8 flex items-center justify-center relative">
                             <PieChart className="w-5 h-5" />
@@ -51,7 +51,7 @@ export function MobileNavBar() {
                         <span className="text-xs font-semibold">{courseProgress}%</span>
                     </div>
                 </div>
-                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground">
+                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground border-r border-border">
                     <CalendarClock className="w-5 h-5 mb-1" />
                     <span className="text-xs">Ends: Dec 31</span>
                 </div>
