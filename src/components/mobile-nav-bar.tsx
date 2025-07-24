@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Phone, PieChart } from 'lucide-react';
+import { Phone, PieChart, CalendarClock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useMemo } from 'react';
@@ -38,18 +38,22 @@ export function MobileNavBar() {
 
     return (
         <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border">
-            <div className="grid h-full max-w-lg grid-cols-2 mx-auto font-medium">
-                <div className="inline-flex flex-col items-center justify-center px-5 h-full relative group text-muted-foreground">
+            <div className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground">
                      <div className="w-full flex items-center gap-2">
                         <div className="w-8 h-8 flex items-center justify-center relative">
                             <PieChart className="w-5 h-5" />
                         </div>
                         <div className="flex-1 text-left">
-                            <p className="text-xs">Course Progress</p>
+                            <p className="text-xs">Progress</p>
                             <Progress value={courseProgress} className="h-1.5 mt-1" />
                         </div>
                         <span className="text-xs font-semibold">{courseProgress}%</span>
                     </div>
+                </div>
+                <div className="inline-flex flex-col items-center justify-center px-3 h-full relative group text-muted-foreground">
+                    <CalendarClock className="w-5 h-5 mb-1" />
+                    <span className="text-xs">Ends: Dec 31</span>
                 </div>
                  {navItems.map((item) => {
                     const isActive = (item.href === '/' && pathname === '/') || (item.href !== '/' && pathname.startsWith(item.href));
