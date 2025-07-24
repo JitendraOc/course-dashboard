@@ -6,7 +6,6 @@ import {
   GraduationCap,
   Users,
   Zap,
-  RefreshCcw,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -35,7 +34,6 @@ import Link from 'next/link';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from './mobile-module-view';
 import { CourseSection } from './course-section';
-import { AppTour } from './app-tour';
 import { MobileNavBar } from './mobile-nav-bar';
 
 const getSubjectProgress = (subject: Subject) => {
@@ -55,21 +53,6 @@ export function Dashboard() {
   const [activeSubject, setActiveSubject] = useState(courseData[0].id);
   const contentAreaRef = useRef<HTMLDivElement>(null);
   const subjectRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const [runTour, setRunTour] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-
-  useEffect(() => {
-    // Only run this on the client
-    setIsClient(true);
-    if (typeof window !== 'undefined') {
-      const hasSeenTour = localStorage.getItem('hasSeenTour');
-      if (!hasSeenTour) {
-        setRunTour(true);
-        localStorage.setItem('hasSeenTour', 'true');
-      }
-    }
-  }, []);
 
   const handleSubjectChange = (subjectId: string) => {
     setActiveSubject(subjectId);
@@ -78,18 +61,6 @@ export function Dashboard() {
         behavior: 'smooth',
         block: 'start',
       });
-    }
-  };
-
-  const handleRestartTour = () => {
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('hasSeenTour');
-        setRunTour(false);
-        // A small timeout to allow state to update before starting the tour
-        setTimeout(() => {
-            setRunTour(true);
-            localStorage.setItem('hasSeenTour', 'true');
-        }, 100);
     }
   };
 
@@ -140,9 +111,8 @@ export function Dashboard() {
 
   return (
     <SidebarProvider>
-      {isClient && <AppTour run={runTour} />}
       <div className="flex min-h-screen">
-        <Sidebar collapsible="icon" id="tour-step-1">
+        <Sidebar collapsible="icon">
           <SidebarHeader>
             <div className="flex items-center gap-2 p-2">
               <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -195,12 +165,6 @@ export function Dashboard() {
                   Contact Info
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Restart Tour" onClick={handleRestartTour}>
-                  <RefreshCcw />
-                  Restart Tour
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter>
@@ -217,7 +181,7 @@ export function Dashboard() {
           </SidebarFooter>
         </Sidebar>
         <SidebarInset>
-          <header id="tour-step-0" className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
             <div className="flex items-center gap-4">
               <SidebarTrigger className="md:hidden" />
               <h1 className="text-lg font-semibold md:text-xl font-headline">Fullstack Developer Course</h1>
@@ -232,7 +196,7 @@ export function Dashboard() {
                 onSubjectChange={handleSubjectChange}
                 />
             </div>
-            <aside id="tour-step-3" className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+            <aside className="hidden lg:block w-72 border-l p-4 md:p-6 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
                 <CourseSection />
             </aside>
           </div>
