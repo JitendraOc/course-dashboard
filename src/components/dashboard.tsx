@@ -36,6 +36,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { MobileModuleView } from './mobile-module-view';
 import { CourseSection } from './course-section';
 import { AppTour } from './app-tour';
+import { MobileNavBar } from './mobile-nav-bar';
 
 const getSubjectProgress = (subject: Subject) => {
     let totalSubModules = 0;
@@ -124,11 +125,14 @@ export function Dashboard() {
 
   if (isMobile) {
     return (
+      <>
         <MobileModuleView 
             subjects={courseData}
             activeSubject={selectedSubject || courseData[0]}
             onSubjectChange={handleSubjectChange}
         />
+        <MobileNavBar />
+      </>
     )
   }
 

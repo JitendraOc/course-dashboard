@@ -73,7 +73,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
     const defaultAccordionValue = useMemo(() => activeSubject.modules.map(m => m.id), [activeSubject]);
 
     return (
-        <div className="bg-background min-h-screen">
+        <div className="bg-background min-h-screen pb-20">
             <header className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm p-4 border-b">
                  <div className="flex items-center">
                     <Link href="/">
@@ -81,17 +81,17 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                             <ArrowLeft />
                         </Button>
                     </Link>
-                    <h1 className="font-semibold text-base md:text-lg">{activeSubModule.title}</h1>
+                    <h1 className="font-semibold text-sm md:text-base">{activeSubModule.title}</h1>
                 </div>
             </header>
             
-            <div className="sticky top-[73px] z-10 bg-background/95 backdrop-blur-sm p-4 pt-0">
+            <div className="sticky top-[73px] z-10 bg-background/95 backdrop-blur-sm p-4 pt-2">
                 <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center overflow-hidden mb-4">
                     <Image src="https://placehold.co/1600x900.png" alt="Video thumbnail" layout="fill" objectFit="cover" data-ai-hint="lesson thumbnail" />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <button className="bg-white/30 backdrop-blur-sm text-white rounded-full p-4">
+                        <Button variant="ghost" className="bg-white/30 backdrop-blur-sm text-white rounded-full p-4 h-auto">
                             <PlayCircle className="h-8 w-8" />
-                        </button>
+                        </Button>
                     </div>
                     <div className="absolute bottom-2 left-2 right-2 text-white text-xs">
                         <div className="flex justify-between items-center px-2">
@@ -178,7 +178,7 @@ export function MobileModuleView({ subjects, activeSubject, onSubjectChange }: {
                     <Button
                         variant="outline"
                         size="icon"
-                        className="fixed bottom-4 left-4 h-12 w-12 rounded-full shadow-lg"
+                        className="fixed bottom-20 left-4 h-12 w-12 rounded-full shadow-lg"
                     >
                         <LayoutGrid className="h-6 w-6" />
                     </Button>

@@ -35,15 +35,86 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Info, Lock, AlertTriangle } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { MobileNavBar } from '@/components/mobile-nav-bar';
 
 export default function GradesPage() {
     const [activeSubject, setActiveSubject] = useState(courseData[0].id);
+    const isMobile = useIsMobile();
 
     const handleSubjectClick = (subjectId: string) => {
         // In a real app, you'd likely navigate to the dashboard and scroll.
         // For now, we just set the active subject for visual feedback in the sidebar.
         setActiveSubject(subjectId);
     };
+
+    const mainContent = (
+      <div className="flex-1 overflow-y-auto p-4 md:p-8">
+            <Alert className="mb-8" style={{ backgroundColor: '#fcc22920', borderColor: '#fcc22980', color: '#8c6d1f' }}>
+                <AlertTriangle className="h-5 w-5 !text-yellow-500" style={{ color: '#fcc229' }} />
+                <AlertDescription className="flex items-center gap-2">
+                    <span className="text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#fcc229' }}>1</span>
+                    You have 1 assessment coming up. Be sure to submit it before the deadline.
+                </AlertDescription>
+            </Alert>
+
+            <div className="rounded-lg border">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead className="w-2/4">Item</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Due</TableHead>
+                    <TableHead>Weight</TableHead>
+                    <TableHead>Grade</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {gradesData.map((assignment) => (
+                    <TableRow key={assignment.id}>
+                        <TableCell>
+                        <div className="flex items-center gap-4">
+                            <Lock className="h-5 w-5 text-muted-foreground" />
+                            <div>
+                            <p className="font-medium text-primary">{assignment.title}</p>
+                            <p className="text-sm text-muted-foreground">Graded Assignment</p>
+                            </div>
+                        </div>
+                        </TableCell>
+                        <TableCell>
+                        <div className="flex items-center gap-2">
+                            <Info className="h-5 w-5 text-muted-foreground" />
+                            <span>{assignment.status}</span>
+                        </div>
+                        </TableCell>
+                        <TableCell>{assignment.dueDate}</TableCell>
+                        <TableCell>{assignment.weight > 0 ? `${assignment.weight}%` : '0%'}</TableCell>
+                        <TableCell>{assignment.grade}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </div>
+        </div>
+    );
+
+  if (isMobile) {
+    return (
+        <div className="flex flex-col min-h-screen">
+            <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4">
+                <h1 className="text-lg font-semibold font-headline">Grades</h1>
+                <Badge variant="outline" className="flex items-center gap-2">
+                    <CalendarClock className="h-4 w-4" />
+                    <span className='text-xs'>Access ends: Dec 31, 2024</span>
+                </Badge>
+            </header>
+            <main className="flex-1 pb-20">
+              {mainContent}
+            </main>
+            <MobileNavBar />
+        </div>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -59,7 +130,7 @@ export default function GradesPage() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            <Accordion type="multiple" defaultValue={[]} className="w-full">
+            <Accordion type="multiple" defaultValue={[]}>
               <SidebarCollapsible value="course-materials">
                 <SidebarCollapsibleButton>
                   <BookOpen />
@@ -123,53 +194,7 @@ export default function GradesPage() {
             <span>Access ends: December 31, 2024</span>
             </Badge>
         </header>
-        <div className="flex-1 overflow-y-auto p-4 md:p-8">
-            <Alert className="mb-8" style={{ backgroundColor: '#fcc22920', borderColor: '#fcc22980', color: '#8c6d1f' }}>
-                <AlertTriangle className="h-5 w-5 !text-yellow-500" style={{ color: '#fcc229' }} />
-                <AlertDescription className="flex items-center gap-2">
-                    <span className="text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold" style={{ backgroundColor: '#fcc229' }}>1</span>
-                    You have 1 assessment coming up. Be sure to submit it before the deadline.
-                </AlertDescription>
-            </Alert>
-
-            <div className="rounded-lg border">
-                <Table>
-                <TableHeader>
-                    <TableRow>
-                    <TableHead className="w-2/4">Item</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Due</TableHead>
-                    <TableHead>Weight</TableHead>
-                    <TableHead>Grade</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {gradesData.map((assignment) => (
-                    <TableRow key={assignment.id}>
-                        <TableCell>
-                        <div className="flex items-center gap-4">
-                            <Lock className="h-5 w-5 text-muted-foreground" />
-                            <div>
-                            <p className="font-medium text-primary">{assignment.title}</p>
-                            <p className="text-sm text-muted-foreground">Graded Assignment</p>
-                            </div>
-                        </div>
-                        </TableCell>
-                        <TableCell>
-                        <div className="flex items-center gap-2">
-                            <Info className="h-5 w-5 text-muted-foreground" />
-                            <span>{assignment.status}</span>
-                        </div>
-                        </TableCell>
-                        <TableCell>{assignment.dueDate}</TableCell>
-                        <TableCell>{assignment.weight > 0 ? `${assignment.weight}%` : '0%'}</TableCell>
-                        <TableCell>{assignment.grade}</TableCell>
-                    </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
-            </div>
-        </div>
+        {mainContent}
       </SidebarInset>
     </div>
   </SidebarProvider>
