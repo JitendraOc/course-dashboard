@@ -1,41 +1,30 @@
 diff --git a/node_modules/react-joyride/dist/index.mjs b/node_modules/react-joyride/dist/index.mjs
-index c8e926a..1b1c67e 100644
+index 7384a27..14352f2 100644
 --- a/node_modules/react-joyride/dist/index.mjs
 +++ b/node_modules/react-joyride/dist/index.mjs
 @@ -1,6 +1,6 @@
- import React, { useMemo, useEffect, useReducer, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
- import { flip, shift, autoPlacement, offset as offset$1, arrow as arrow$1, hide, autoUpdate } from '@floating-ui/react';
--import ReactDOM, { findDOMNode, unstable_renderSubtreeIntoContainer, unmountComponentAtNode } from 'react-dom';
-+import ReactDOM, { findDOMNode } from 'react-dom';
- import { Animate } from 'react-simple-animate';
- import { usePopper } from 'react-popper';
- import { useFloating, useTransitionStyles, useInteractions, useRole, useClick, useDismiss, useFocusGuard } from '@floating-ui/react';
-@@ -1283,7 +1283,7 @@
-   }, [props.styles, step.styles, defaultStyles]);
-   if (!props.run || !isMounted) {
-     return null;
--  }
-+  }  
-   return /* @__PURE__ */ React.createElement(Portal, {
-     target: props.portal,
-     id
-@@ -1486,9 +1486,17 @@
- 
-     if (target) {
-       this.portal = document.createElement("div");
--      unstable_renderSubtreeIntoContainer(this, children, this.portal);
-+      // unstable_renderSubtreeIntoContainer(this, children, this.portal);
-+      this.root = ReactDOM.createRoot(this.portal)
-+      this.root.render(children)
-       target.appendChild(this.portal);
-     }
-+  }
-+
-+  componentWillUnmount() {
-+    this.root?.unmount();
-+    // unmountComponentAtNode(this.portal);
-+    this.portal?.remove();
+ import e, { PureComponent as t, Component as r, useState as n, useEffect as o, useLayoutEffect as i, useRef as s, useCallback as a } from "react";
+-import { createPortal as c, findDOMNode as u, unmountComponentAtNode as l, unstable_renderSubtreeIntoContainer as p } from "react-dom";
+ import d from "react-is";
++import { createPortal as c, findDOMNode as u } from "react-dom";
+ import m from "deepmerge";
+ import h from "hoist-non-react-statics";
+ import f from "is-plain-object";
+@@ -459,7 +459,7 @@
    }
- 
+   componentWillUnmount() {
+     this.portal && (0, o.unmount)(this.portal);
+-  }
++  } 
    render() {
-
+     const {
+       props: {
+@@ -522,7 +522,7 @@
+     this.node.style.position = "absolute", this.node.style.top = "0", this.node.style.width = "100vw", this.node.style.zIndex = z, t.appendChild(this.node);
+   }
+   unmount() {
+-    this.isReact16 ? l(this.node) : p(null, this.node, () => {
++    this.isReact16 ? unmountComponentAtNode(this.node) : unstable_renderSubtreeIntoContainer(null, this.node, () => {
+       this.node.parentNode.removeChild(this.node);
+     });
+   }
