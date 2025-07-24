@@ -36,7 +36,6 @@ const AccordionTrigger = React.forwardRef<
     {/* Let's revert the previous change and modify the AccordionTrigger itself */}
     {/* and use a span for the text content if needed */}
     {/* Reverting to the original structure and adjusting styles */}
-      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
 
   </AccordionPrimitive.Header>
 ))
