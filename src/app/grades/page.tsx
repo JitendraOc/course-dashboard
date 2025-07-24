@@ -59,7 +59,7 @@ export default function GradesPage() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            <Accordion type="multiple" defaultValue={['course-materials']} className="w-full">
+            <Accordion type="multiple" defaultValue={[]} className="w-full">
               <SidebarCollapsible value="course-materials">
                 <SidebarCollapsibleButton>
                   <BookOpen />
@@ -69,8 +69,12 @@ export default function GradesPage() {
                   <SidebarMenuSub>
                     {courseData.map((subject) => (
                         <Link href="/" key={subject.id}>
-                            <SidebarMenuSubButton>
+                            <SidebarMenuSubButton
+                              className="whitespace-normal h-auto py-2 text-sm relative justify-between"
+                            >
+                              <span className="flex-1 text-left">
                                 {subject.title}
+                              </span>
                             </SidebarMenuSubButton>
                         </Link>
                     ))}
